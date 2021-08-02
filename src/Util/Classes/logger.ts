@@ -1,5 +1,6 @@
 import { MessageButton } from "discord-buttons";
 import { Collection, GuildMember, Message, MessageEmbed, Role, Snowflake, User, Util, WebhookClient } from "discord.js";
+import { uploadText } from "../Functions/uploadTo";
 import { TimeStamp } from "./time";
 const superagent = require("superagent");
 
@@ -39,7 +40,7 @@ export class Messages {
                     .setDescription(`> **Mensaje**\n\n**ID del mensaje:** ${this.message.id}\n**Autor del mensaje:** ${this.message.author} (${this.message.author.id})\n**Canal:**${this.message.channel} (${this.message.channel.id})\n**Creación del mensaje:** <t:${new TimeStamp(this.message.createdTimestamp).OutDecimals()}:R>\nBot: **${bott}**\n\n> **Fotografía**\n\n**Nombre de la fotografía:** ${m.name}\n**Link de la fotografía**: [Link](${m.url})\n**Tamaño de la fotografía**: ${m.height} x ${m.width} pixeles\n**ID de la imagen:** ${m.id}\n**Link permanente:** [PermaLink](${x.body.data.url})`)
                     .setTimestamp();
 
-                    this.message.guild.channels.cache.get(`867130572807471115`).send(w).catch(() => {})
+                    this.message.guild.channels.cache.get(`867045061014323230`).send(w).catch(() => {})
                 })
             })
         }
@@ -52,27 +53,19 @@ export class Messages {
                      .setDescription(`**Embed eliminado**\n\n**Canal:** ${this.message.channel} (${this.message.channel.id})\n**Autor:** ${this.message.author} (${this.message.author.id})\n**Creado:** <t:${new TimeStamp(this.message.createdTimestamp).OutDecimals()}:R>\n**ID del mensaje:** ${this.message.id}\nBot: **${bott}**\n**Embed:**`)
                      .setColor(0x005f1d91);
 
-                    return this.message.guild.channels.cache.get(`867130572807471115`).send({embed: b}).then(() => this.message.guild.channels.cache.get(`867130572807471115`).send({embed: x})).catch(() => {})
+                    return this.message.guild.channels.cache.get(`867045061014323230`).send({embed: b}).then(() => this.message.guild.channels.cache.get(`867045061014323230`).send({embed: x})).catch(() => {})
                 })
             }
         
 
         if (this.message.content == null || this.message.content.length == 0) return;
 
-        if (Date.now() - this.message.createdTimestamp >= 20000) {
-        const a = new MessageEmbed()
-        .setAuthor(`${this.message.author.tag} | Mensaje eliminado`, this.message.author.displayAvatarURL({dynamic: true}))
-        .setDescription(`**Canal:** ${this.message.channel} (${this.message.channel.id})\n**Autor**: ${this.message.author} (${this.message.author.id})\n**Creado:** <t:${new TimeStamp(this.message.createdTimestamp).OutDecimals()}:R>\n**ID del mensaje:** ${this.message.id}\nBot: **${bott}**\n\n**Contenido:**\n\`\`\`${this.message.content}\`\`\``)
-        .setColor(0x00b30b0b)
-        return await this.message.guild.channels.cache.get(`867130572807471115`).send(a).catch(() => {})
-        }
-
         const a = new MessageEmbed()
         .setAuthor(`${this.message.author.tag} | Mensaje eliminado`, this.message.author.displayAvatarURL({dynamic: true}))
         .setDescription(`**Canal:** ${this.message.channel} (${this.message.channel.id})\n**Autor**: ${this.message.author} (${this.message.author.id})\n**Creado:** <t:${new TimeStamp(this.message.createdTimestamp).OutDecimals()}:R>\n**ID del mensaje:** ${this.message.id}\nBot: **${bott}**\n\n**Contenido:**\n\`\`\`${this.message.content}\`\`\``)
         .setColor(0x00b30b0b)
 
-        return this.message.guild.channels.cache.get(`867130572807471115`).send(a).catch(() => {})        
+        return this.message.guild.channels.cache.get(`867045061014323230`).send(a).catch(() => {})        
     }
 
     async edited() {
@@ -81,6 +74,10 @@ export class Messages {
         if (this.message.author.bot == true) var bott = "Si";
         if (this.message.author.bot == false) bott = "No";
         if (this.message.author.bot == null) bott = "Sin datos";
+
+        
+
+        if (this.message.content.length == 0) return;
 
         const a = new MessageEmbed()
         .setAuthor(`${this.message.author.tag} | Mensaje editado`, this.message.author.displayAvatarURL({dynamic: true}))
@@ -92,7 +89,23 @@ export class Messages {
         .setURL(`https://discord.com/channels/${this.message.guild.id}/${this.message.channel.id}/${this.message.id}`)
         .setLabel("Ir al mensaje");
 
-        return this.message.guild.channels.cache.get(`867130572807471115`).send("⠀", {embed: a, component: b})
+        return this.message.guild.channels.cache.get(`867045061014323230`).send("⠀", {embed: a, component: b})
+    }
+
+    async BulkDelete() {
+        const c = new MessageEmbed()
+        .setAuthor(`${this.messages.size} Mensajes purgueados.`)
+        .setDescription(`**Canal:** ${this.messages.first().channel}\n**Cantidad de mensajes:** ${this.messages.size}\n**Mensajes:**\n\`\`\`${this.messages.map(x => `${x.author.username} (${x.author.id}): ${x.content || `Embed o imagen`}`).join("\n")}\`\`\``)
+        .setColor(0x005f1d91)
+
+        return this.messages.first().guild.channels.cache.get(`867045061014323230`).send(c).catch(async () => {
+            const a = new MessageEmbed()
+            .setAuthor(`${this.messages.size} Mensajes purgueados`)
+            .setDescription(`**Canal:** ${this.messages.first().channel}\n**Cantidad de mensajes:** ${this.messages.size}\n **Mensajes**:\n[Los mensajes se encuentran en este link ya que no caben aqui.](${await uploadText(`${this.messages.map(x => `${x.author.username} (${x.author.id}): ${x.content || `Embed o imagen`}`).join("\n")}`)})`)
+            .setColor(0x005f1d91);
+
+            return this.messages.first().guild.channels.cache.get(`867045061014323230`).send(a).catch(() => {});
+        })
     }
 
     

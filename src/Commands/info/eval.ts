@@ -30,7 +30,7 @@ export default class PingCommand extends BaseCommand {
         const time = TimeStamp
         const uploadTex = uploadText
         const bit = BitField
-        const iscord = discord
+        const Discord = discord
 
         function send(text: object | number |string) {
             return message.channel.send(text);  

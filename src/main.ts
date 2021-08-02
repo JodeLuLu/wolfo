@@ -5,6 +5,7 @@ import Captain from 'captainjs'
 import './Typings'
 import { Messages } from "./Util/Classes/logger"
 import { uploadText } from "./Util/Functions/uploadTo"
+import { eventsCentral } from "./Util/Functions/events"
 
 global.prettyConsole = new Captain.Console({
     "use_colors": true,
@@ -23,8 +24,7 @@ require("discord-buttons")(TempoClient);
 
 // Eventos por que con clases que flojera hacer todo así
 
-TempoClient.on("messageDelete", (message: Message) => new Messages(message).deleted())
-TempoClient.on("messageUpdate", (viejo: Message, nuevo: Message) => new Messages(nuevo, viejo).edited())
+eventsCentral(TempoClient);
 
 TempoClient.uploadText = uploadText
 TempoClient.commands = new Collection();
