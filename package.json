@@ -1,5 +1,5 @@
 {
-	"name": "BotTemplate",
+	"name": "wolfybot",
 	"version": "1.0.0",
 	"description": "",
 	"main": "src/index.ts",
@@ -17,7 +17,7 @@
 	],
 	"author": "Diego",
 	"repository": {
-		"url": "https://github.com/Chere3/BotTemplate"
+		"url": "https://github.com/Chere3/wolfyBot"
 	},
 	"license": "Apache-2.0",
 	"dependencies": {
