@@ -17,7 +17,7 @@ Bot dedicado al servidor de [YoSoyWolfy](https://discord.gg/yosoywolfy), este es
 
 2- Luego, pon el siguiente comando en tu `cmd`.
 ```shell
-git clone https://github.com/Chere3/JasperBot
+git clone https://github.com/Chere3/wolfyBot
 ```
 3- Luego de esto, abre la carpeta donde se puso y crea el siguiente archivo. `.env`, dentro de él. Pondras lo siguiente: 
 ```s
