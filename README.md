@@ -1,6 +1,6 @@
 # WolfyBot
 
-Bot dedicado al servidor de [Mapaches Gvng ™](https://discord.gg/mapachesgvng), este es open source y puede ser hosteado en tu propia pc siguiendo los siguientes pasos.
+Bot dedicado al servidor de [YoSoyWolfy](https://discord.gg/yosoywolfy), este es open source y puede ser hosteado en tu propia pc siguiendo los siguientes pasos.
 
 ### Requerimientos:
 1- Tener [`node 14.x`](https://nodejs.org/es/) o posteriores en tu pc instalado.
