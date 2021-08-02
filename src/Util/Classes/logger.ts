@@ -118,7 +118,7 @@ export class Roles {
     before: GuildMember
     reason: string
 
-    constructor(received: GuildMember, before: GuildMember, role: Role, reason: string) {
+    constructor(received: GuildMember, before: GuildMember, role: Role, reason?: string) {
         this.received = received;
         this.before = before;
         this.role = role;
@@ -130,13 +130,8 @@ export class Roles {
             this.before.roles.cache.forEach(rol => {
                 if (!this.received.roles.cache.has(rol.id)) {
                     const embed = new MessageEmbed()
-                    .setAuthor(`${this.received.user.tag} | Rol removido`, this.received.user.displayAvatarURL())
-                    .setColor(`RED`)
-                    .setDescription(`${rol}`)
-                    .setFooter(`ID ROL: ${rol.id} | ID USUARIO: ${this.received.id}`)
-                    .setTimestamp();
-
-                   
+                    .setAuthor(`${this.received.user.tag} | Rol removido`)
+                    .setDescription(`> **Usuario:**\n\n**Nombre**: ${this.received}\n**Creacion:** <t:${new TimeStamp(this.received.user.createdTimestamp).OutDecimals()}:R>`)
                 }
             })
         }
