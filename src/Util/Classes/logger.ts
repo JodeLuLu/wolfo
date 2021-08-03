@@ -1,4 +1,5 @@
 import { MessageButton } from "discord-buttons";
+import { PartialGuildMember } from "discord.js";
 import { Collection, GuildMember, Message, MessageEmbed, Role, Snowflake, User, Util, WebhookClient } from "discord.js";
 import { uploadText } from "../Functions/uploadTo";
 import { TimeStamp } from "./time";
@@ -113,25 +114,36 @@ export class Messages {
 }
 
 export class Roles {
-    role: Role
     received: GuildMember
-    before: GuildMember
+    before: GuildMember | PartialGuildMember
     reason: string
 
-    constructor(received: GuildMember, before: GuildMember, role: Role, reason?: string) {
+    constructor(received: GuildMember, before: GuildMember | PartialGuildMember , reason?: string) {
         this.received = received;
         this.before = before;
-        this.role = role;
         this.reason = reason;
     }
 
     async quitado() {
         if (this.before.roles.cache.size > this.received.roles.cache.size) {
-            this.before.roles.cache.forEach(rol => {
+            this.before.roles.cache.forEach(async rol => {
                 if (!this.received.roles.cache.has(rol.id)) {
+
+                    // Get  the executor
+                    
+                   
+                    var nitro = `<t:${new TimeStamp(this.received.premiumSinceTimestamp).OutDecimals()}:R>`;
+                    if (this.received.premiumSinceTimestamp == 0) var nitro = "Este usuario no ha boosteado el servidor.";
+                    if (rol.mentionable == true) var mencionable = "Si";
+                    if (rol.mentionable == false) var mencionable = "No";
+                    
+
                     const embed = new MessageEmbed()
-                    .setAuthor(`${this.received.user.tag} | Rol removido`)
-                    .setDescription(`> **Usuario:**\n\n**Nombre**: ${this.received}\n**Creacion:** <t:${new TimeStamp(this.received.user.createdTimestamp).OutDecimals()}:R>`)
+                    .setAuthor(`${this.received.user.tag} | Rol removido`, this.received.user.displayAvatarURL({dynamic: true}))
+                    .setDescription(`> **Usuario:**\n\n**Nombre**: ${this.received} (${this.received.id})\n**Creacion:** <t:${new TimeStamp(this.received.user.createdTimestamp).OutDecimals()}:R>\n**Esta en el servidor desde:** <t:${new TimeStamp(this.received.joinedTimestamp).OutDecimals()}:R>\n**Booster**: ${nitro}\n\n> **Rol**\n\n**Nombre:** ${rol.name} (${rol.id})\n**Cantidad de usuarios con este rol**: ${rol.members.size}\n**Mencionable**: ${mencionable}\n **Posicion:** ${rol.rawPosition}/${this.received.guild.roles.highest.position}\n\n**Rol:**\n${rol}`)
+                    .setColor(0x00b30b0b);
+
+                    return this.received.guild.channels.cache.get(`867130572807471115`).send(embed).catch(() => {});
                 }
             })
         }
@@ -139,18 +151,23 @@ export class Roles {
 
     async puesto() {
         if (this.before.roles.cache.size < this.received.roles.cache.size) {
-            this.received.roles.cache.forEach(rol => {
-                if (!this.before.roles.cache.has(rol.id)) {
-                    const embed = new MessageEmbed()
-                    .setAuthor(`${this.received.user.tag} | Rol puesto`, this.received.user.displayAvatarURL())
-                    .setColor(`PURPLE`)
-                    .setDescription(`${rol}`)
-                    .setFooter(`ID ROL: ${rol.id} | ID USUARIO: ${this.received.id}`)
-                    .setTimestamp();
-
+            this.received.roles.cache.forEach(async rol => {
+                if (!this.before.roles.cache.has(rol.id)) { 
                     
-                }
-            })
+                   
+                    var nitro = `<t:${new TimeStamp(this.received.premiumSinceTimestamp).OutDecimals()}:R>`;
+                    if (this.received.premiumSinceTimestamp == 0) var nitro = "Este usuario no ha boosteado el servidor.";
+                    if (rol.mentionable == true) var mencionable = "Si";
+                    if (rol.mentionable == false) var mencionable = "No";
+                    
+
+                    const embed = new MessageEmbed()
+                    .setAuthor(`${this.received.user.tag} | Rol agregado`, this.received.user.displayAvatarURL({dynamic: true}))
+                    .setDescription(`> **Usuario:**\n\n**Nombre**: ${this.received} (${this.received.id})\n**Creacion:** <t:${new TimeStamp(this.received.user.createdTimestamp).OutDecimals()}:R>\n**Esta en el servidor desde:** <t:${new TimeStamp(this.received.joinedTimestamp).OutDecimals()}:R>\n**Booster**: ${nitro}\n\n> **Rol**\n\n**Nombre:** ${rol.name} (${rol.id})\n**Cantidad de usuarios con este rol**: ${rol.members.size}\n**Mencionable**: ${mencionable}\n **Posicion:** ${rol.rawPosition}/${this.received.guild.roles.highest.position}\n\n**Rol:**\n${rol}`)
+                    .setColor(0x000c912d);
+
+                    return this.received.guild.channels.cache.get(`867130572807471115`).send(embed).catch(() => {});
+            }})
         }
     }
 }

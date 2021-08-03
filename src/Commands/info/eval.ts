@@ -1,6 +1,6 @@
 import { TempContext } from "../../Util/Classes/Context"
 import { BaseCommand } from "../../Util/Classes/BaseCommand"
-import { BitField, Client, Message, MessageEmbed } from 'discord.js'
+import { BitField, Client, Message, MessageEmbed, Util } from 'discord.js'
 import discord from "discord.js"
 import node from 'node-superfetch'
 import { MessageButton } from "discord-buttons"
@@ -31,6 +31,7 @@ export default class PingCommand extends BaseCommand {
         const uploadTex = uploadText
         const bit = BitField
         const Discord = discord
+        const util = Util;
 
         function send(text: object | number |string) {
             return message.channel.send(text);  

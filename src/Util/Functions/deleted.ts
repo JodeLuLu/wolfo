@@ -3,6 +3,7 @@ import { Message } from "discord.js";
 export function pingsChannel(message: Message) {
     
     
+    
     if (message.channel.id == "871503059329646622") {
         if (message.member.roles.cache.has(`713831778636398712`) || message.author.id == "845797782832939008") {return;} else {
         if (message.content.startsWith(`!actualizaciones`) || message.content.startsWith(`!noticias`) || message.content.startsWith(`!eventos`) || message.content.startsWith(`!alianzas`) || message.content.startsWith(`!nsfw`)) {         
@@ -13,7 +14,7 @@ export function pingsChannel(message: Message) {
             message.delete();
         }
     }
-    }
+  }
 }
 
 export function FhotBlocker(message: Message) {
