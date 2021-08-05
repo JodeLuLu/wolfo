@@ -18,8 +18,8 @@ export function eventsCentral(client: Client) {
         ], status = statuses[Math.floor(Math.random() * statuses.length)]
     
         setInterval(() => {
-        client.user.setPresence({ status: "dnd", activity: { name: status, type: "WATCHING" } })
-        }, 10000)
+        client.user.setPresence({ status: "idle", activity: { name: status, type: "WATCHING" } })
+        }, 5000)
 
         // Logging
         const a = new MessageEmbed()
@@ -29,7 +29,7 @@ export function eventsCentral(client: Client) {
         
         setTimeout(() => {
         client.channels.cache.get(`871853951455223818`).send(a);
-        }, 5000);
+        }, 10000);
     })
 
     // Mensajes
