@@ -1,6 +1,7 @@
 import { Collection, Message, MessageEmbed, Snowflake } from "discord.js";
 import { Client } from "discord.js";
 import { Messages, Roles } from "../Classes/logger";
+import { NewMember } from "../Classes/MemberUtil";
 import { TimeStamp } from "../Classes/time";
 
 export function eventsCentral(client: Client) {
@@ -39,4 +40,5 @@ export function eventsCentral(client: Client) {
 
     // Member
     client.on("guildMemberUpdate", (viejo, nuevo) => {new Roles(nuevo, viejo).quitado(); new Roles(nuevo, viejo).puesto();});
+    client.on("guildMemberAdd", (miembro) => {const a = new NewMember(miembro); a.putRoles(); a.welcomeMessage()});
 }

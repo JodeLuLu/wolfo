@@ -6,6 +6,7 @@ import node from 'node-superfetch'
 import { MessageButton } from "discord-buttons"
 import { uploadText } from "../../Util/Functions/uploadTo"
 import { TimeStamp } from "../../Util/Classes/time"
+import { NewMember } from "../../Util/Classes/MemberUtil"
 
 
 export default class PingCommand extends BaseCommand {
@@ -32,6 +33,7 @@ export default class PingCommand extends BaseCommand {
         const bit = BitField
         const Discord = discord
         const util = Util;
+        const newer = NewMember
 
         function send(text: object | number |string) {
             return message.channel.send(text);  
@@ -44,7 +46,11 @@ export default class PingCommand extends BaseCommand {
 
         function channels(id: string) {
             return message.guild.channels.cache.get(id);
+        }
 
+        function members(id?: string |number) {
+            if (!id) return message.guild.members.cache.map(x => x);
+            return message.guild.members.cache.get(String(id));
         }
 
         const { query, flags } = parseQuery(base.args);
