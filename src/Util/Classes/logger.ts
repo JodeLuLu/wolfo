@@ -140,7 +140,7 @@ export class Roles {
 
                     const embed = new MessageEmbed()
                     .setAuthor(`${this.received.user.tag} | Rol removido`, this.received.user.displayAvatarURL({dynamic: true}))
-                    .setDescription(`> **Usuario:**\n\n**Nombre**: ${this.received} (${this.received.id})\n**Creacion:** <t:${new TimeStamp(this.received.user.createdTimestamp).OutDecimals()}:R>\n**Esta en el servidor desde:** <t:${new TimeStamp(this.received.joinedTimestamp).OutDecimals()}:R>\n**Booster**: ${nitro}\n\n> **Rol**\n\n**Nombre:** ${rol.name} (${rol.id})\n**Cantidad de usuarios con este rol**: ${rol.members.size}\n**Mencionable**: ${mencionable}\n **Posicion:** ${rol.rawPosition}/${this.received.guild.roles.highest.position}\n\n**Rol:**\n${rol}`)
+                    .setDescription(`**Usuario:** ${this.received} (${this.received.id})\n**Nombre:** ${rol.name} (${rol.id})\n**Cantidad de usuarios con este rol**: ${rol.members.size}\n**Mencionable**: ${mencionable}\n **Posicion:** ${rol.rawPosition}/${this.received.guild.roles.highest.position}\n\n**Rol:**\n${rol}`)
                     .setColor(0x00b30b0b);
 
                     return this.received.guild.channels.cache.get(`867130572807471115`).send(embed).catch(() => {});
@@ -163,7 +163,7 @@ export class Roles {
 
                     const embed = new MessageEmbed()
                     .setAuthor(`${this.received.user.tag} | Rol agregado`, this.received.user.displayAvatarURL({dynamic: true}))
-                    .setDescription(`> **Usuario:**\n\n**Nombre**: ${this.received} (${this.received.id})\n**Creacion:** <t:${new TimeStamp(this.received.user.createdTimestamp).OutDecimals()}:R>\n**Esta en el servidor desde:** <t:${new TimeStamp(this.received.joinedTimestamp).OutDecimals()}:R>\n**Booster**: ${nitro}\n\n> **Rol**\n\n**Nombre:** ${rol.name} (${rol.id})\n**Cantidad de usuarios con este rol**: ${rol.members.size}\n**Mencionable**: ${mencionable}\n **Posicion:** ${rol.rawPosition}/${this.received.guild.roles.highest.position}\n\n**Rol:**\n${rol}`)
+                    .setDescription(`**Usuario:** ${this.received} (${this.received.id})\n**Nombre:** ${rol.name} (${rol.id})\n**Cantidad de usuarios con este rol**: ${rol.members.size}\n**Mencionable**: ${mencionable}\n **Posicion:** ${rol.rawPosition}/${this.received.guild.roles.highest.position}\n\n**Rol:**\n${rol}`)
                     .setColor(0x000c912d);
 
                     return this.received.guild.channels.cache.get(`867130572807471115`).send(embed).catch(() => {});
