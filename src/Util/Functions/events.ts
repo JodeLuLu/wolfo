@@ -11,7 +11,10 @@ export function eventsCentral(client: Client) {
 
         const statuses = [
             `logs del servidor.`,
-            `Autoroles`
+            `Autoroles del servidor`,
+            `Usuarios nuevos`,
+            `Todos los furrys en ${client.guilds.cache.get(`699200033131724870`).name}`,
+            `Usuarios poniendo sus autoroles`
         ], status = statuses[Math.floor(Math.random() * statuses.length)]
     
         setInterval(() => {
