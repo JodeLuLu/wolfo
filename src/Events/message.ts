@@ -1,7 +1,7 @@
 import { TempContext } from "../Util/Classes/Context"
 import { config } from "../config"
 import { Message } from "discord.js";
-import { FhotBlocker, pingsChannel } from "../Util/Functions/deleted";
+import { FhotBlocker, pingsChannel } from "../Util/Functions/messageUtil";
 import { pings } from "../Util/Functions/autoroles";
 
 const { prefix } = config;
