@@ -1,6 +1,7 @@
 import { MessageEmbed, Client, Collection, Message, PermissionResolvable } from "discord.js"
-import { owners } from "../assets/owners"
+import { config } from "../../config"
 import { TempContext } from './Context'
+
 
 
 interface options {
@@ -36,7 +37,7 @@ export class BaseCommand {
     memberPermissions: string[]
     usage: any
     example: any
-    devs: typeof owners
+    devs: typeof config.owners
     constructor(client: Client, options: options) {
         this.bot = client
         this.name = options.name
@@ -60,16 +61,16 @@ export class BaseCommand {
             .setColor(`FF0000`)
             .setTimestamp()
 
-        if (this.dev === true && !owners.includes(msg.author.id)) return msg.channel.send(e.setDescription(`❌ | Lo siento, pero este comando esta creado solo para owners.`))
+        if (this.dev === true && !config.owners.includes(msg.author.id)) return msg.channel.send(e.setDescription(`❌ | Lo siento, pero este comando esta creado solo para owners.`))
         if (this.guildOnly === true && !msg.guild) return msg.channel.send(e.setDescription(`❌ | Este comando solo esta permitido dentro de servidores.`))
-        if (!this.status && !owners.includes(msg.author.id)) return msg.channel.send(e.setDescription(`❌ | Comando bajo mantenimiento o desabilitado.`))
-        if (this.checkCooldown(msg) && !owners.includes(msg.author.id)) {
+        if (!this.status && !config.owners.includes(msg.author.id)) return msg.channel.send(e.setDescription(`❌ | Comando bajo mantenimiento o desabilitado.`))
+        if (this.checkCooldown(msg) && !config.owners.includes(msg.author.id)) {
             const now = Date.now()
             const time = this.cooldowns.get(msg.author.id)
             const timeLeft = (time - now) / 1000
             return msg.channel.send(e.setDescription(`❌ | Hey, tranquilo, puedes ejecutar este comando de nuevo en ${timeLeft.toFixed(1)} segundos.`))
         }
-        if (this.nsfw === true && msg.channel.nsfw === false && !owners.includes(msg.author.id)) return msg.channel.send(e.setDescription(`❌ | Comando exclusivo para canales NSFW.`))
+        if (this.nsfw === true && msg.channel.nsfw === false && !config.owners.includes(msg.author.id)) return msg.channel.send(e.setDescription(`❌ | Comando exclusivo para canales NSFW.`))
         if (msg.guild && this.botPermissions[0] && !this.botPermissions.some((x) => msg.guild.me.hasPermission(x as PermissionResolvable))) {
             return msg.channel.send(e.setDescription(`❌ | No tengo los siguientes permisos para el comando: \`${(this.botPermissions.map(x => this.parsePermission(x))).join(', ')}\``))
         }
