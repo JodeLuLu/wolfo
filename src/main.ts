@@ -18,7 +18,7 @@ global.prettyConsole = new Captain.Console({
     "debug_prefix": "§bDebug"
 });
 
-export const TempoClient = new Client({partials: ["CHANNEL", "GUILD_MEMBER", "MESSAGE", "REACTION", "USER"], disableMentions: "everyone"})
+export const TempoClient = new Client({partials: ["CHANNEL", "GUILD_MEMBER", "MESSAGE", "REACTION", "USER"]})
 
 require("discord-buttons")(TempoClient);
 

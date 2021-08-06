@@ -128,12 +128,6 @@ export class Roles {
         if (this.before.roles.cache.size > this.received.roles.cache.size) {
             this.before.roles.cache.forEach(async rol => {
                 if (!this.received.roles.cache.has(rol.id)) {
-
-                    // Get  the executor
-                    
-                   
-                    var nitro = `<t:${new TimeStamp(this.received.premiumSinceTimestamp).OutDecimals()}:R>`;
-                    if (this.received.premiumSinceTimestamp == 0) var nitro = "Este usuario no ha boosteado el servidor.";
                     if (rol.mentionable == true) var mencionable = "Si";
                     if (rol.mentionable == false) var mencionable = "No";
                     
@@ -143,7 +137,7 @@ export class Roles {
                     .setDescription(`**Usuario:** ${this.received} (${this.received.id})\n**Nombre:** ${rol.name} (${rol.id})\n**Cantidad de usuarios con este rol**: ${rol.members.size}\n**Mencionable**: ${mencionable}\n **Posicion:** ${rol.rawPosition}/${this.received.guild.roles.highest.position}\n\n**Rol:**\n${rol}`)
                     .setColor(0x00b30b0b);
 
-                    return this.received.guild.channels.cache.get(`867130572807471115`).send(embed).catch(() => {});
+                    return this.received.guild.channels.cache.get(`867045164542590976`).send(embed).catch(() => {});
                 }
             })
         }
@@ -154,9 +148,6 @@ export class Roles {
             this.received.roles.cache.forEach(async rol => {
                 if (!this.before.roles.cache.has(rol.id)) { 
                     
-                   
-                    var nitro = `<t:${new TimeStamp(this.received.premiumSinceTimestamp).OutDecimals()}:R>`;
-                    if (this.received.premiumSinceTimestamp == 0) var nitro = "Este usuario no ha boosteado el servidor.";
                     if (rol.mentionable == true) var mencionable = "Si";
                     if (rol.mentionable == false) var mencionable = "No";
                     
@@ -166,7 +157,7 @@ export class Roles {
                     .setDescription(`**Usuario:** ${this.received} (${this.received.id})\n**Nombre:** ${rol.name} (${rol.id})\n**Cantidad de usuarios con este rol**: ${rol.members.size}\n**Mencionable**: ${mencionable}\n **Posicion:** ${rol.rawPosition}/${this.received.guild.roles.highest.position}\n\n**Rol:**\n${rol}`)
                     .setColor(0x000c912d);
 
-                    return this.received.guild.channels.cache.get(`867130572807471115`).send(embed).catch(() => {});
+                    return this.received.guild.channels.cache.get(`867045164542590976`).send(embed).catch(() => {});
             }})
         }
     }
