@@ -3,10 +3,14 @@ import { Client } from "discord.js";
 import { TimeStamp } from "../Classes/time";
 
 export function richPresence(client: Client) {
+
+    const personalizados  = [`${client.guilds.cache.get(`699200033131724870`).memberCount} en el servidor.`, `${client.guilds.cache.get(`699200033131724870`).roles.fetch(`871542385975386112`).then(x => x.members.size)} usuarios nuevos en el servidor.`, `Autoroles de usuarios.`, `Usuarios en 🚫」・cuarentena`];
+    const personalizado = personalizados[Math.floor(Math.random() * personalizados.length)];
+    
     
     setInterval(() => {
-    client.user.setPresence({status: `idle`, activities: [{name: "prueba"}]})
-    }, 5000)
+        client.user.setPresence({status: `idle`, activities: [{name: `${personalizado}`, type: "WATCHING"}]})
+    }, 10000)
 
     // Logging
     const a = new MessageEmbed()
