@@ -58,7 +58,7 @@ export class BaseCommand {
 
     canRun(msg, isDev: boolean) {
         const e = new MessageEmbed()
-            .setColor(`FF0000`)
+            .setColor(0x00ff0000)
             .setTimestamp()
 
         if (this.dev === true && !config.owners.includes(msg.author.id)) return msg.channel.send(e.setDescription(`❌ | Lo siento, pero este comando esta creado solo para owners.`))

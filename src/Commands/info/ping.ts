@@ -22,7 +22,7 @@ export default class PingCommand extends BaseCommand {
         .setTitle(`Ping!`)
         .setDescription(`Envío de mensajes: \`${pong}\`\n$Bot: \`${pong2}\``);
         const mensaje1 = await msg.message.channel.send(`estoy midiendo el ping uwur~`)
-        var mensaje2 = await msg.message.channel.send(embed)
+        var mensaje2 = await msg.message.channel.send({embeds: [embed]})
         await mensaje1.delete()
         var pong = await `${(msg.client.ws.ping) / 10000 } segundos`
         var pong2 = await `${Math.floor(mensaje2.createdTimestamp - mensaje1.createdTimestamp) / 100} segundos`
@@ -32,7 +32,7 @@ export default class PingCommand extends BaseCommand {
         .setDescription(`Envío de mensajes: \`${pong2}\`\n$Bot: \`${pong}\``)
         .setColor(`PURPLE`);
         await mensaje2.delete();
-        await msg.channel.send(embed2)
+        await msg.channel.send({embeds: [embed2]})
 
     }
 }

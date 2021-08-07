@@ -24,6 +24,6 @@ export function FhotBlocker(message: Message) {
         setTimeout(() => {
             message.channel.messages.fetch().then(x => x.map(x => x).filter(x => x.author.id == "809946357535997952")[0].delete())
         }, 500);
-        message.channel.send("El fhot no esta permitido en el servidor fuera de canales NSFW." + "" + `${message.author}`).then(x => x.delete({timeout: 5000}))
+        message.channel.send("El fhot no esta permitido en el servidor fuera de canales NSFW." + "" + `${message.author}`).then(x => x.delete())
     }
 }

@@ -31,7 +31,7 @@ export class TempContext {
     }
 
     send(content: any, adds?: any) {
-        return this.channel.send(content, adds).catch((e) => { console.log(e) });
+        return this.channel.send({content: `${content}`, embeds: [adds]}).catch((e) => { console.log(e) });
     }
 
     embedRes(text, option: options = null, color = 'RANDOM') {
@@ -40,7 +40,7 @@ export class TempContext {
 
         switch (option) {
             case 'error':
-                e.setColor('FF0000')
+                e.setColor(0x00FF0000)
                     .setDescription(`❌ | ${text}`)
                 break;
             case 'info':
@@ -48,7 +48,7 @@ export class TempContext {
                     .setDescription(`<:info:779042723650207755> | ${text}`)
                 break;
             case 'boterror':
-                e.setColor('FF0000')
+                e.setColor(0x00FF0000)
                     .setDescription(`❌ | Se ha encontrado un error la ejecución del comando:\n \`\`\`js\n${text}\`\`\``)
                     .setFooter(`Reporta el error al staff si es necesario`)
                 break;
@@ -57,7 +57,7 @@ export class TempContext {
                     .setDescription(`👍 | ${text}`)
                 break;
             default:
-                e.setColor(color)
+                e.setColor(0x0)
                     .setDescription(text)
                 break;
         }

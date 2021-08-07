@@ -11,15 +11,7 @@ declare module 'discord.js' {
     
 
     interface Channel {
-        readonly lastMessage: Message | null;
-       send(
-          content: APIMessageContentResolvable | (MessageOptions & { split?: false }) | MessageAdditions,
-        ): Promise<Message>;
-       send(options: MessageOptions & { split: true | SplitOptions }): Promise<Message[]>;
-       send(options: MessageOptions | APIMessage): Promise<Message | Message[]>;
-       send(content: StringResolvable, options: (MessageOptions & { split?: false }) | MessageAdditions): Promise<Message>;
-       send(content: StringResolvable, options: MessageOptions & { split: true | SplitOptions }): Promise<Message[]>;
-       send(content: StringResolvable, options: MessageOptions): Promise<Message | Message[]>;
+        send(options: string | MessagePayload | MessageOptions): Promise<Message>;
         
     }
 }

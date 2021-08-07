@@ -18,9 +18,7 @@ global.prettyConsole = new Captain.Console({
     "debug_prefix": "§bDebug"
 });
 
-export const TempoClient = new Client({partials: ["CHANNEL", "GUILD_MEMBER", "MESSAGE", "REACTION", "USER"]})
-
-require("discord-buttons")(TempoClient);
+export const TempoClient = new Client({partials: ["CHANNEL", "USER", "REACTION", "MESSAGE", "GUILD_MEMBER"], intents: ["GUILDS", "GUILD_BANS", "GUILD_EMOJIS_AND_STICKERS", "GUILD_INTEGRATIONS", "GUILD_INVITES", "GUILD_MEMBERS", "GUILD_MESSAGES", "GUILD_MESSAGE_REACTIONS", "GUILD_MESSAGE_TYPING", "GUILD_PRESENCES", "GUILD_VOICE_STATES", "GUILD_WEBHOOKS"]})
 
 // Eventos por que con clases que flojera hacer todo así
 

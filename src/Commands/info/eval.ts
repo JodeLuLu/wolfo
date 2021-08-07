@@ -1,9 +1,8 @@
 import { TempContext } from "../../Util/Classes/Context"
 import { BaseCommand } from "../../Util/Classes/BaseCommand"
-import { BitField, Client, Message, MessageEmbed, Util } from 'discord.js'
+import { BitField, Client, Message, MessageActionRow, MessageButton, MessageEmbed, Util } from 'discord.js'
 import discord from "discord.js"
 import node from 'node-superfetch'
-import { MessageButton } from "discord-buttons"
 import { uploadText } from "../../Util/Functions/uploadTo"
 import { TimeStamp } from "../../Util/Classes/time"
 import { NewMember } from "../../Util/Classes/MemberUtil"
@@ -36,7 +35,7 @@ export default class PingCommand extends BaseCommand {
         const newer = NewMember
 
         function send(text: object | number |string) {
-            return message.channel.send(text);  
+            return message.channel.send({content: `${text}`});  
         }
 
         function messages(id: string) {
@@ -102,14 +101,17 @@ export default class PingCommand extends BaseCommand {
 
         const button = new MessageButton()
         .setStyle(4)
-        .setID("1")
+        .setCustomId("1")
         .setLabel("Presiona para eliminar el mensaje");
-        
-        const one = await base.channel.send("⠀", {embed: embed, component: button})
-        const filtro = (x) => x.clicker.user.id === base.message.author.id;
-        const collector = await one.awaitButtons(filtro, {max: 5000, maxButtons: 1})
 
-        if (!collector.size) {
+        const a = new MessageActionRow()
+        .addComponents(button);
+        
+        const one = await base.channel.send({components: [a], embeds: [embed]})
+        const filtro = (x) => x.clicker.user.id === base.message.author.id;
+        const collector = await one.createMessageComponentCollector({interactionType: "MESSAGE_COMPONENT", max: 1, time: 5000, componentType: "BUTTON"});
+
+        if (!collector.total) {
             return button.setDisabled()
         }
 
@@ -126,15 +128,18 @@ export default class PingCommand extends BaseCommand {
 
         const button = new MessageButton()
         .setStyle(4)
-        .setID("1")
+        .setCustomId("1")
         .setLabel("Presiona para eliminar el mensaje");
 
-        const one = await base.channel.send("⠀", {embed: embed, component: button})
+        const a = new MessageActionRow()
+        .addComponents(button);
+
+        const one = await base.channel.send({embeds: [embed], components: [a]})
         
         const filtro = (x) => x.clicker.user.id === base.message.author.id;
-        const collector = await one.awaitButtons(filtro, {max: 5000, maxButtons: 1})
+        const collector = await one.createMessageComponentCollector({interactionType: "MESSAGE_COMPONENT", max: 1, time: 5000, componentType: "BUTTON"});
 
-        if (!collector.size) {
+        if (!collector.total) {
             return button.setDisabled()
         }
 

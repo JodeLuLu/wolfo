@@ -1,4 +1,4 @@
-import { Collection, Message, MessageEmbed, RateLimitData, Snowflake } from "discord.js";
+import { Collection, Message, MessageEmbed, PartialMessage, RateLimitData, Snowflake } from "discord.js";
 import { Client } from "discord.js";
 import { Messages, Roles } from "../Classes/logger";
 import { NewMember } from "../Classes/MemberUtil";
@@ -12,9 +12,9 @@ export function eventsCentral(client: Client) {
 
     client.on("rateLimit", (ratelimit: RateLimitData) => {RateLimited(ratelimit, client)});
     // Mensajes
-    client.on("messageDelete", (message: Message) => new Messages(message).deleted());
-    client.on("messageUpdate", (viejo: Message, nuevo: Message) => new Messages(nuevo, viejo).edited());
-    client.on("messageDeleteBulk", (messages: Collection<Snowflake, Message>) => new Messages(null, null, null, messages).BulkDelete());
+    client.on("messageDelete", async (message: Message) => {if (message.partial) await message.fetch(); const a = new Messages(message); a.deleted()});
+    client.on("messageUpdate", (viejo: Message, nuevo: Message) => {new Messages(nuevo, viejo).edited()});
+    client.on("messageDeleteBulk", (messages: Collection<Snowflake, Message>) => {new Messages(null, null, null, messages).BulkDelete()});
 
     // Member
     client.on("guildMemberUpdate", (viejo, nuevo) => {new Roles(nuevo, viejo).quitado(); new Roles(nuevo, viejo).puesto();});
