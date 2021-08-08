@@ -1,8 +1,11 @@
-import { ShardingManager } from 'discord.js'
+import { Collection, Client, Message } from "discord.js"
 import { config } from './config'
+import { handlers } from './Util/Functions/handlers'
 import Captain from 'captainjs'
-import path from 'path'
 import './Typings'
+
+import { uploadText } from "./Util/Functions/uploadTo"
+import { eventsCentral } from "./Util/Functions/events"
 
 global.prettyConsole = new Captain.Console({
     "use_colors": true,
@@ -15,18 +18,14 @@ global.prettyConsole = new Captain.Console({
     "debug_prefix": "§bDebug"
 });
 
-const Manager = new ShardingManager(path.join(`${__dirname}/main.ts`), {
-    totalShards: "auto",
-    token: config.auth.token,
-    execArgv: ["node_modules/ts-node/dist/bin.js"]
-})
+export const TempoClient = new Client({partials: ["CHANNEL", "USER", "REACTION", "MESSAGE", "GUILD_MEMBER"], intents: ["GUILDS", "GUILD_BANS", "GUILD_EMOJIS_AND_STICKERS", "GUILD_INTEGRATIONS", "GUILD_INVITES", "GUILD_MEMBERS", "GUILD_MESSAGES", "GUILD_MESSAGE_REACTIONS", "GUILD_MESSAGE_TYPING", "GUILD_PRESENCES", "GUILD_VOICE_STATES", "GUILD_WEBHOOKS"]})
 
-Manager.spawn()
+// Eventos por que con clases que flojera hacer todo así
 
-Manager.on("shardCreate", (shard) => {
-    global.prettyConsole.log(`La shard ${shard.id + 1} fue creada.`)
+eventsCentral(TempoClient);
 
-    shard.on("disconnect", () => global.prettyConsole.log(`La shard ${shard.id + 1} se desconecto.`))
-    shard.on("reconnecting", () => global.prettyConsole.log(`Shard ${shard.id + 1} resumida.`))
-    shard.on("ready", () => global.prettyConsole.log(`La shard ${shard.id + 1} esta lista.`))
-})
+TempoClient.uploadText = uploadText
+TempoClient.commands = new Collection();
+handlers(TempoClient);
+
+TempoClient.login(config.auth.token);

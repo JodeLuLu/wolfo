@@ -1,4 +1,4 @@
-import { MessageButton, PartialGuildMember } from "discord.js";
+import { MessageActionRow, MessageButton, PartialGuildMember } from "discord.js";
 import { Collection, GuildMember, Message, MessageEmbed, Role, Snowflake, User, Util, WebhookClient } from "discord.js";
 import { uploadText } from "../Functions/uploadTo";
 import { TimeStamp } from "./time";
@@ -40,7 +40,7 @@ export class Messages {
                     .setDescription(`> **Mensaje**\n\n**ID del mensaje:** ${this.message.id}\n**Autor del mensaje:** ${this.message.author} (${this.message.author.id})\n**Canal:**${this.message.channel} (${this.message.channel.id})\n**Creación del mensaje:** <t:${new TimeStamp(this.message.createdTimestamp).OutDecimals()}:R>\nBot: **${bott}**\n\n> **Fotografía**\n\n**Nombre de la fotografía:** ${m.name}\n**Link de la fotografía**: [Link](${m.url})\n**Tamaño de la fotografía**: ${m.height} x ${m.width} pixeles\n**ID de la imagen:** ${m.id}\n**Link permanente:** [PermaLink](${x.body.data.url})`)
                     .setTimestamp();
 
-                    this.message.guild.channels.cache.get(`867045061014323230`)
+                    this.message.client.channels.cache.get(`867045061014323230`).send({embeds: [w]})
                 })
             })
         }
@@ -53,7 +53,7 @@ export class Messages {
                      .setDescription(`**Embed eliminado**\n\n**Canal:** ${this.message.channel} (${this.message.channel.id})\n**Autor:** ${this.message.author} (${this.message.author.id})\n**Creado:** <t:${new TimeStamp(this.message.createdTimestamp).OutDecimals()}:R>\n**ID del mensaje:** ${this.message.id}\nBot: **${bott}**\n**Embed:**`)
                      .setColor(0x005f1d91);
 
-                    return this.message.guild.channels.cache.get(`867045061014323230`)
+                    return this.message.client.channels.cache.get(`867045061014323230`).send({embeds: [b]})
                 })
             }
         
@@ -65,7 +65,7 @@ export class Messages {
         .setDescription(`**Canal:** ${this.message.channel} (${this.message.channel.id})\n**Autor**: ${this.message.author} (${this.message.author.id})\n**Creado:** <t:${new TimeStamp(this.message.createdTimestamp).OutDecimals()}:R>\n**ID del mensaje:** ${this.message.id}\nBot: **${bott}**\n\n**Contenido:**\n\`\`\`${this.message.content}\`\`\``)
         .setColor(0x00b30b0b)
 
-        return this.message.guild.channels.cache.get(`867045061014323230`)       
+        return this.message.client.channels.cache.get(`867045061014323230`).send({embeds: [a]})       
     }
 
     async edited() {
@@ -89,7 +89,10 @@ export class Messages {
         .setURL(`https://discord.com/channels/${this.message.guild.id}/${this.message.channel.id}/${this.message.id}`)
         .setLabel("Ir al mensaje");
 
-        return this.message.guild.channels.cache.get(`867045061014323230`)
+        const c = new MessageActionRow()
+        .addComponents(b);
+
+        return this.message.client.channels.cache.get(`867045061014323230`).send({content: "a", embeds: [a], components: [c]})
     }
 
     async BulkDelete() {
@@ -98,13 +101,13 @@ export class Messages {
         .setDescription(`**Canal:** ${this.messages.first().channel}\n**Cantidad de mensajes:** ${this.messages.size}\n**Mensajes:**\n\`\`\`${this.messages.map(x => `${x.author.username} (${x.author.id}): ${x.content || `Embed o imagen`}`).join("\n")}\`\`\``)
         .setColor(0x005f1d91)
 
-        this.messages.first().guild.channels.cache.get(`867045061014323230`)
+        this.messages.first().guild.channels.cache.get(`867045061014323230`).send({embeds: []})
             const a = new MessageEmbed()
             .setAuthor(`${this.messages.size} Mensajes purgueados`)
             .setDescription(`**Canal:** ${this.messages.first().channel}\n**Cantidad de mensajes:** ${this.messages.size}\n **Mensajes**:\n[Los mensajes se encuentran en este link ya que no caben aqui.](${await uploadText(`${this.messages.map(x => `${x.author.username} (${x.author.id}): ${x.content || `Embed o imagen`}`).join("\n")}`)})`)
             .setColor(0x005f1d91);
 
-            return this.messages.first().guild.channels.cache.get(`867045061014323230`)
+            return this.messages.first().guild.channels.cache.get(`867045061014323230`).send({embeds: [c]})
         }
     }
 
@@ -133,7 +136,7 @@ export class Roles {
                     .setDescription(`**Usuario:** ${this.received} (${this.received.id})\n**Nombre:** ${rol.name} (${rol.id})\n**Cantidad de usuarios con este rol**: ${rol.members.size}\n**Mencionable**: ${mencionable}\n **Posicion:** ${rol.rawPosition}/${this.received.guild.roles.highest.position}\n\n**Rol:**\n${rol}`)
                     .setColor(0x00b30b0b);
 
-                    return this.received.guild.channels.cache.get(`867045164542590976`)
+                    return this.received.guild.channels.cache.get(`867045164542590976`).send({embeds: []})
                 }
             })
         }
@@ -153,7 +156,7 @@ export class Roles {
                     .setDescription(`**Usuario:** ${this.received} (${this.received.id})\n**Nombre:** ${rol.name} (${rol.id})\n**Cantidad de usuarios con este rol**: ${rol.members.size}\n**Mencionable**: ${mencionable}\n **Posicion:** ${rol.rawPosition}/${this.received.guild.roles.highest.position}\n\n**Rol:**\n${rol}`)
                     .setColor(0x000c912d);
 
-                    return this.received.guild.channels.cache.get(`867045164542590976`)
+                    return this.received.guild.channels.cache.get(`867045164542590976`).send({embeds: []})
             }})
         }
     }
@@ -174,6 +177,6 @@ export class Apodo {
        .setAuthor(`${this.before.user.tag} | Apodo cambiado.`, this.before.user.displayAvatarURL({dynamic: true}))
        .setDescription(`Apodo anterior:\n\`\`\`${this.before.nickname}\`\`\`\n\nApodo nuevo:\n\`\`\`\`\`\`${this.after.nickname}`)
 
-       return this.before.guild.channels.cache.get(`873313370177142795`)
+       return this.before.guild.channels.cache.get(`873313370177142795`).send({embeds: []})
    }
     }
