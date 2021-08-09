@@ -20,7 +20,22 @@ interface options {
     example?(prefix: string): string
 }
 
-
+/**
+ * @class BaseCommand
+ * @param {string} name El nombre del comando.
+ * @param {boolean} dev Especifica si el comando es solo para dueños del bot.
+ * @param {boolean} guildOnly Muestra si el comando es solo para servidores..
+ * @param {boolean} nsfw Especifica si el comando es solo para canales nsfw.
+ * @param {string[]} aliases Los complementos del comando.
+ * @param {boolean} status Da a conocer si el comando esta en mantenimiento o no.
+ * @param {string} category La categoría del comando.
+ * @param {number} cooldown El cooldown del comando.
+ * @param {string} description La descripción del comando.
+ * @param {string[]} botPermissions Los permisos que requiere en bot para que el comando funcione.
+ * @param {string[]} memberPermissions Los permisos que requiere el ejecutor para que el comando funcione.
+ * @param {string} usage El uso del comando.
+ * @param {string} example Ejemeplo del uso del comando. 
+ */
 export class BaseCommand {
     bot: Client
     name: string

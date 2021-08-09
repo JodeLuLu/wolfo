@@ -1,10 +1,13 @@
 import { MessageEmbed, RateLimitData } from "discord.js";
 import { Client } from "discord.js";
+import { consola } from "../..";
 import { TimeStamp } from "../Classes/time";
 
 export async function richPresence(client: Client) {
 
-    const c = await client.guilds.cache.get(`699200033131724870`).roles.fetch(`871542385975386112`).then(x => x.members.size)
+    consola.log(`Estoy listo.`)
+
+    const c = (await client.guilds.cache.get(`699200033131724870`).roles.fetch(`871542385975386112`)).members.size
 
     const personalizados  = [`${client.guilds.cache.get(`699200033131724870`).memberCount} usuarios en el servidor.`, ` ${c} usuarios nuevos en el servidor.`, `Autoroles de usuarios.`, `Usuarios en 🚫」・cuarentena`];
     const personalizado = personalizados[Math.floor(Math.random() * personalizados.length)];

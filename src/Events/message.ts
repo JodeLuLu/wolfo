@@ -7,6 +7,7 @@ import { pings } from "../Util/Functions/autoroles";
 const { prefix } = config;
 
 export const run = async (bot, msg: Message) => {
+    try {
     pingsChannel(msg);
     pings(msg);
     FhotBlocker(msg);
@@ -29,4 +30,5 @@ export const run = async (bot, msg: Message) => {
     
 
     cmd.run(message)
+    } catch (a) {}
 }

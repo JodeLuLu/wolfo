@@ -12,6 +12,7 @@ declare module 'discord.js' {
 
     interface Channel {
         send(options: string | MessagePayload | MessageOptions): Promise<Message>;
+        nsfw: boolean
         
     }
 }

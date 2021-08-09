@@ -7,7 +7,7 @@ import './Typings'
 import { uploadText } from "./Util/Functions/uploadTo"
 import { eventsCentral } from "./Util/Functions/events"
 
-global.prettyConsole = new Captain.Console({
+export const consola = new Captain.Console({
     "use_colors": true,
     "debug": false,
     "format": "§8[§d%time%§8] [%prefix%§8] §7%message%",
@@ -21,6 +21,14 @@ global.prettyConsole = new Captain.Console({
 export const TempoClient = new Client({partials: ["CHANNEL", "USER", "REACTION", "MESSAGE", "GUILD_MEMBER"], intents: ["GUILDS", "GUILD_BANS", "GUILD_EMOJIS_AND_STICKERS", "GUILD_INTEGRATIONS", "GUILD_INVITES", "GUILD_MEMBERS", "GUILD_MESSAGES", "GUILD_MESSAGE_REACTIONS", "GUILD_MESSAGE_TYPING", "GUILD_PRESENCES", "GUILD_VOICE_STATES", "GUILD_WEBHOOKS"]})
 
 // Eventos por que con clases que flojera hacer todo así
+
+process.on('uncaughtException', err => {
+  console.error(err && err.stack)
+});
+
+process.on(`unhandledRejection`, err => {
+    consola.error(err && err)
+})
 
 eventsCentral(TempoClient);
 
