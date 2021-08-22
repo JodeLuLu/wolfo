@@ -7,6 +7,7 @@ import { TempContext } from './Context'
 interface options {
     name: string
     dev?: boolean
+    staff?: boolean
     guildOnly?: boolean
     nsfw?: boolean
     aliases?: string[]
@@ -24,6 +25,7 @@ interface options {
  * @class BaseCommand
  * @param {string} name El nombre del comando.
  * @param {boolean} dev Especifica si el comando es solo para dueños del bot.
+ * @param {boolean} staff Especifica si el comando es solo para los miembros del staff.
  * @param {boolean} guildOnly Muestra si el comando es solo para servidores..
  * @param {boolean} nsfw Especifica si el comando es solo para canales nsfw.
  * @param {string[]} aliases Los complementos del comando.
@@ -40,6 +42,7 @@ export class BaseCommand {
     bot: Client
     name: string
     dev: boolean
+    staff?: boolean
     guildOnly: boolean
     nsfw: boolean
     aliases: string[]
@@ -74,23 +77,24 @@ export class BaseCommand {
     canRun(msg, isDev: boolean) {
         const e = new MessageEmbed()
             .setColor(0x00ff0000)
-            .setTimestamp()
+            .setTimestamp();
 
-        if (this.dev === true && !config.owners.includes(msg.author.id)) return msg.channel.send(e.setDescription(`❌ | Lo siento, pero este comando esta creado solo para owners.`))
-        if (this.guildOnly === true && !msg.guild) return msg.channel.send(e.setDescription(`❌ | Este comando solo esta permitido dentro de servidores.`))
-        if (!this.status && !config.owners.includes(msg.author.id)) return msg.channel.send(e.setDescription(`❌ | Comando bajo mantenimiento o desabilitado.`))
+        if (this.dev === true && !config.owners.includes(msg.author.id)) return msg.reply({embeds: [e.setDescription(`❌ | Lo siento, pero este comando esta creado solo para owners.`)]})
+        if (this.staff === true && !msg.member.roles.cache.has(`867293184216662086`) || !msg.member.roles.cache.has(`867293184216662086`)) return msg.reply({embeds: [e.setDescription(`❌ | Este comando es exclusivo para el staff.`)]})
+        if (this.guildOnly === true && !msg.guild) return msg.reply({embeds: [e.setDescription(`❌ | Este comando solo esta permitido dentro de servidores.`)]})
+        if (!this.status && !config.owners.includes(msg.author.id)) return msg.reply({embeds: [e.setDescription(`❌ | Comando bajo mantenimiento o desabilitado.`)]})
         if (this.checkCooldown(msg) && !config.owners.includes(msg.author.id)) {
             const now = Date.now()
             const time = this.cooldowns.get(msg.author.id)
             const timeLeft = (time - now) / 1000
-            return msg.channel.send(e.setDescription(`❌ | Hey, tranquilo, puedes ejecutar este comando de nuevo en ${timeLeft.toFixed(1)} segundos.`))
+            return msg.reply({embeds: [e.setDescription(`❌ | Hey, tranquilo, puedes ejecutar este comando de nuevo en ${timeLeft.toFixed(1)} segundos.`)]})
         }
-        if (this.nsfw === true && msg.channel.nsfw === false && !config.owners.includes(msg.author.id)) return msg.channel.send(e.setDescription(`❌ | Comando exclusivo para canales NSFW.`))
+        if (this.nsfw === true && msg.channel.nsfw === false && !config.owners.includes(msg.author.id)) return msg.reply({embeds: [e.setDescription(`❌ | Comando exclusivo para canales NSFW.`)]})
         if (msg.guild && this.botPermissions[0] && !this.botPermissions.some((x) => msg.guild.me.hasPermission(x as PermissionResolvable))) {
-            return msg.channel.send(e.setDescription(`❌ | No tengo los siguientes permisos para el comando: \`${(this.botPermissions.map(x => this.parsePermission(x))).join(', ')}\``))
+            return msg.reply({embeds: [e.setDescription(`❌ | No tengo los siguientes permisos para el comando: \`${(this.botPermissions.map(x => this.parsePermission(x))).join(', ')}\``)]})
         }
         if (msg.guild && this.memberPermissions[0] && !this.memberPermissions.some((x) => msg.member.hasPermission(x as PermissionResolvable)) && !isDev) {
-            return msg.channel.send(e.setDescription(`❌ | No tienes los suficientes permisos para correr el comando: \`${(this.memberPermissions.map(x => this.parsePermission(x))).join(', ')}\``))
+            return msg.reply({embeds: [e.setDescription(`❌ | No tienes los suficientes permisos para correr el comando: \`${(this.memberPermissions.map(x => this.parsePermission(x))).join(', ')}\``)]})
         }
 
         return false

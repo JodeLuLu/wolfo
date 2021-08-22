@@ -6,6 +6,7 @@ import node from 'node-superfetch'
 import { uploadText } from "../../Util/Functions/uploadTo"
 import { TimeStamp } from "../../Util/Classes/time"
 import { NewMember } from "../../Util/Classes/MemberUtil"
+import { parseEval, parseQuery, parseType } from "../../Util/Functions/messageUtil"
 
 
 export default class PingCommand extends BaseCommand {
@@ -33,172 +34,68 @@ export default class PingCommand extends BaseCommand {
         const Discord = discord
         const util = Util;
         const newer = NewMember
+        const membed = MessageEmbed;
+        const getFlags = parseQuery;
 
-        function send(text: object | number |string) {
-            return message.channel.send({content: `${text}`});  
-        }
+        async function send(text: object | number |string) {return await message.channel.send({content: `${text}`});}
+        async function messages(id: string) {return message.channel.messages.fetch(id);}
+        async function channels(id: string) {return await message.guild.channels.cache.get(id);}
+        async function members(id?: string |number) {if (!id) return message.guild.members.cache.map(x => x); return await message.guild.members.cache.get(String(id));}
+        async function auto(code: any) {await setInterval(() => {code}, 10000)}
+        function alea(valores: string[]) {return valores[Math.floor(Math.random() * valores.length)]}
 
-        function messages(id: string) {
-            return message.channel.messages.fetch(id);
-
-        }
-
-        function channels(id: string) {
-            return message.guild.channels.cache.get(id);
-        }
-
-        function members(id?: string |number) {
-            if (!id) return message.guild.members.cache.map(x => x);
-            return message.guild.members.cache.get(String(id));
-        }
 
         const { query, flags } = parseQuery(base.args);
     
     if (!query.length) return;
-    
     let input = query.join(" ");
-    
+
     const embed = new MessageEmbed()
-    .setTitle("Eval~");
-    if (input.length > 2048) {
-        const { body } = await node.post("https://paste.mod.gg/documents").send(input);
-        embed.setDescription(`:inbox_tray: **Entrada:**\nhttps://paste.mod.gg/${body.key}.js`);
-    } else {
-        embed.setDescription(":inbox_tray: **Entrada:**\n" + "```js\n" + input + "```");
-    }
-    
+    .setAuthor(`🧠 Calculado.`);
     try {
         if (flags.includes("async")) {
-            input = `(async () => { ${input} })()`;
+        input = `(async () => { ${input} })()`;
         }
-        
+
+        if (flags.includes("delete")) base.message.delete() 
         let { evaled, type } = await parseEval(eval(input));
-        
         let depth = 0;
         
         if (flags.some(input => input.includes("depth"))) {
             depth = flags.find(number => number.includes("depth")).split("=")[1];
-            depth = parseInt(`${depth}`, 10);
-        }
-        
+            depth = parseInt(`${depth}`, 10);};
+
         if (flags.includes("silent")) return;
-        
         if (typeof evaled !== "string") evaled = require("util").inspect(evaled, { depth });
-        
         let output = evaled.replace(/`/g, "`" + String.fromCharCode(8203)).replace(/@/g, "@" + String.fromCharCode(8203));
         
-        if (output.length > 1024) {
+        
+        if (output.length > 6000) {
             const { body } = await node.post("https://paste.mod.gg/documents").send(output);
-            embed.addField(":outbox_tray: **Output:**", `https://paste.mod.gg/${body.key}.js`);
-        } else if (input.includes("TOKEN") || input.includes("process.env")) {
-            embed.addField(":outbox_tray: **Salida:**", "```diff\n- Esto es privado```");
-        } else {
-            embed.addField(":outbox_tray: **Salida:**", "```js\n" + output + "```");
-        }
-        embed.addField(":label: Tipo:", "```ts\n" + "\u200B" + type + "```", true);
-        embed.addField(`:robot: Ping:`, "```ts\n" + "\u200B" + Math.floor(base.client.ws.ping) + "ms" + "```", true);
+            embed.setDescription(`https://paste.mod.gg/${body.key}.js`);} else if (input.includes("TOKEN") || input.includes("process.env")) {
+                embed.setDescription( "```diff\n- Esto es privado```");
+        
+            } else {
+            embed.setDescription("```js\n" + output + "```");
+            }
+
+        embed.setFooter(`Tipo: ${type} | Ping: ${base.client.ws.ping}ms`)
         embed.setColor(0x002c2f33)
 
-        const button = new MessageButton()
-        .setStyle(4)
-        .setCustomId("1")
-        .setLabel("Presiona para eliminar el mensaje");
-
-        const a = new MessageActionRow()
-        .addComponents(button);
-        
-        const one = await base.channel.send({components: [a], embeds: [embed]})
-        const filtro = (x) => x.clicker.user.id === base.message.author.id;
-        const collector = await one.createMessageComponentCollector({interactionType: "MESSAGE_COMPONENT", max: 1, time: 5000, componentType: "BUTTON"});
-
-        if (!collector.total) {
-            return button.setDisabled()
-        }
-
-        one.delete()
+        return base.send(embed)
 
     } catch(error) {
         if (error.length > 1024) {
             const { body } = await node.post("https://paste.mod.gg/documents").send(error);
-            embed.addField(":outbox_tray: **Entrada:**", `https://paste.mod.gg/${body.key}.ts`);
+            embed.setDescription(`https://paste.mod.gg/${body.key}.ts`);
         } else {
-            embed.addField(":outbox_tray: **Salida:**", "```js\n" + error + "```");
+            embed.setDescription("```js\n" + error + "```");
         }
-        embed.addField(":label: Tipo:", "```ts\n" + parseType(error) + "```");
-
-        const button = new MessageButton()
-        .setStyle(4)
-        .setCustomId("1")
-        .setLabel("Presiona para eliminar el mensaje");
-
-        const a = new MessageActionRow()
-        .addComponents(button);
-
-        const one = await base.channel.send({embeds: [embed], components: [a]})
-        
-        const filtro = (x) => x.clicker.user.id === base.message.author.id;
-        const collector = await one.createMessageComponentCollector({interactionType: "MESSAGE_COMPONENT", max: 1, time: 5000, componentType: "BUTTON"});
-
-        if (!collector.total) {
-            return button.setDisabled()
-        }
-
-        one.delete()
-
-
-        
-        
+        embed.setFooter(`Tipo: ${parseType(error)} | Ping: ${base.client.ws.ping}ms`);
+        return base.send(embed);
     }
     }
 }
 
-async function parseEval(input) {
-    const isPromise = input instanceof Promise && typeof input.then === "function" && typeof input.catch === "function";
-    
-    if (isPromise) {
-        input = await input;
-        
-        return {
-            evaled: input,
-            type: `Promise<${parseType(input)}>`
-        }
-    }
-    return {
-        evaled: input,
-        type: parseType(input)
-    }
-}
 
-function parseType(input) {
-    if (input instanceof Buffer) {
-        let length = Math.round(input.length / 1024 / 1024);
-        let ic = "MB";
-        
-        if (!length) {
-            length = Math.round(input.length / 1024);
-            ic = "KB";
-        }
-        
-        if (!length) {
-            length = Math.round(input.length);
-            ic = "Bytes";
-        }
-        return `Buffer (${length} ${ic})`;
-    }
-    return input === null || input === undefined ? "void" : input.constructor.name;
-}
-
-function parseQuery(queries) {
-    const query = [];
-    const flags = [];
-    
-    for (const args of queries) {
-        if (args.startsWith("--")) {
-            flags.push(args.slice(2).toLowerCase());
-        } else {
-            query.push(args);
-        }
-    }
-    return { query, flags }
-}
 

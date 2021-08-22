@@ -7,11 +7,10 @@ export class NewMember {
     }
 
     putRoles() {
-        this.member.roles.add(`871102104331255848`, `Roles de nuevo usuario.`).catch(a => {});
-        this.member.roles.add(`871501359218851850`, `Roles de nuevo usuario.`).catch(a => {});
-        this.member.roles.add(`871502816236175371`, `Roles de nuevo usuario.`).catch(a => {});
-        this.member.roles.add(`871502962143395932`, `Roles de nuevo usuario.`).catch(a => {});
-        this.member.roles.add(`851129161367420938`, `Roles de nuevo usuario.`).catch(a => {});
+        this.member.roles.add(`871501359218851850`, `Rol al verificarse el usuario.`).catch(a => {});
+        this.member.roles.add(`871502816236175371`, `Rol al verificarse el usuario.`).catch(a => {});
+        this.member.roles.add(`871502962143395932`, `Rol al verificarse el usuario.`).catch(a => {});
+        this.member.roles.add(`851129161367420938`, `Roles al verificarse el usuario.`).catch(a => {});
     }
 
     welcomeMessage() {

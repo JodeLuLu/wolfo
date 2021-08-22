@@ -1,7 +1,7 @@
 import { TempContext } from "../Util/Classes/Context"
 import { config } from "../config"
 import { Message } from "discord.js";
-import { FhotBlocker, pingsChannel } from "../Util/Functions/messageUtil";
+import { FhotBlocker, parseQuery, pingsChannel } from "../Util/Functions/messageUtil";
 import { pings } from "../Util/Functions/autoroles";
 
 const { prefix } = config;
@@ -15,11 +15,15 @@ export const run = async (bot, msg: Message) => {
     if (!msg.content.startsWith(prefix)) return;
     const message = new TempContext(bot, msg);
 
-    message.args = msg.content.slice(prefix.length).trim().split(/ +/g)
+    
+
+    message.args = msg.content.slice(prefix.length).trim().split(/ +/g);
 
     const args = message.args,
     command = args.shift().toLowerCase();
 
+    const {query, flags} = parseQuery(args);
+    message.flags = flags;
     
 
     let cmd = message.client.commands.get(command) || message.client.commands.find(c => c.aliases && c.aliases.includes(command))

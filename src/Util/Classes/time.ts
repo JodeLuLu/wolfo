@@ -16,6 +16,12 @@ const units = [
     { max: 28512000000, value: 2592000000, name: 'mese', past: '1', future: '1' } 
   ];
 
+
+  /**
+   * @class Esta clase esta pensada para dar soporte a las cariables de tiempo, sea timestamps o UNIX
+   * @argument {number | string} timestamp La UNIX timestamp.
+   */
+
 export class TimeStamp {
     timestamp: number | string;
     constructor(timestamp: number | string) {
@@ -121,6 +127,10 @@ export class TimeStamp {
         return noo;
     }
 
+
+    variable() {
+     return this.ago(new Date(this.timestamp));
+    }
 
       
 

@@ -202,9 +202,34 @@ export class Apodo {
        if (this.before.nickname == this.after.nickname) return;
        const embed = new MessageEmbed()
        .setAuthor(`${this.before.user.tag} | Apodo cambiado.`, this.before.user.displayAvatarURL({dynamic: true}))
-       .setDescription(`**Apodo anterior:** ${this.before.nickname}\n**Apodo nuevo:** ${this.after.nickname}\n**Apodos:**\n\`\`\`${this.before.nickname} => ${this.after.nickname}\`\`\``)
+       .setDescription(`**Apodo anterior:** ${this.before.nickname || `Sin apodo.`}\n**Apodo nuevo:** ${this.after.nickname || `Sin apodo.`}\n**Apodos:**\n\`\`\`${this.before.nickname || " "} => ${this.after.nickname || " "}\`\`\``)
        .setColor(0x005f1d91);
 
        return this.before.guild.channels.cache.get(`873313370177142795`).send({embeds: [embed]}).catch(() => {});
    }
     }
+
+/**
+ * @class Clase destinada al cambio de los miembros como entrada y salida y se encarga de registrarlos.
+ * @argument {GuildMember} member Parametro que da el evento para los miembros.
+ */
+
+export class Members {
+    member: GuildMember | PartialGuildMember
+    
+
+    // Constructor
+    constructor(member: GuildMember | PartialGuildMember) {
+        this.member = member;
+    }
+
+    async entrante() {
+        const embed = new MessageEmbed()
+        .setAuthor(`${this.member.user.tag} | Ha entrado en el servidor`)
+        .setThumbnail(this.member.user.displayAvatarURL())
+        .setDescription(`**Usuario:** ${this.member} (${this.member.id})\n**Creada hace:**<t:${new TimeStamp(`${this.member.user.createdTimestamp}`).OutDecimals()}:R> (dinamica)\n **Creada hace:** ${new TimeStamp(this.member.user.createdTimestamp).variable()} (estatico)\nInsignias: **${this.member.user.flags.toArray()}**`)
+        .setColor(0x000c912d);
+
+        this.member.client.channels.cache.get(`873313370177142795`).send({embeds: [embed]})
+    }
+}
