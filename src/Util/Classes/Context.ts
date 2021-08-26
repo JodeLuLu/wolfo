@@ -51,35 +51,4 @@ export class TempContext {
         if (!adds) return this.message.reply(`${content}`);
         return this.message.reply({content: `${content}`, embeds: [adds]});
     }
-
-    embedRes(text, option: options = null, color = 'RANDOM') {
-        const e = new MessageEmbed()
-            .setTimestamp()
-
-        switch (option) {
-            case 'error':
-                e.setColor(0x00FF0000)
-                    .setDescription(`❌ | ${text}`)
-                break;
-            case 'info':
-                e.setColor(0x3498db)
-                    .setDescription(`<:info:779042723650207755> | ${text}`)
-                break;
-            case 'boterror':
-                e.setColor(0x00FF0000)
-                    .setDescription(`❌ | Se ha encontrado un error la ejecución del comando:\n \`\`\`js\n${text}\`\`\``)
-                    .setFooter(`Reporta el error al staff si es necesario`)
-                break;
-            case 'good':
-                e.setColor(0x2ecc71)
-                    .setDescription(`👍 | ${text}`)
-                break;
-            default:
-                e.setColor(0x0)
-                    .setDescription(text)
-                break;
-        }
-
-        return this.send(e)
-    }
 }

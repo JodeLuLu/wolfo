@@ -80,7 +80,7 @@ export class BaseCommand {
             .setTimestamp();
 
         if (this.dev === true && !config.owners.includes(msg.author.id)) return msg.reply({embeds: [e.setDescription(`❌ | Lo siento, pero este comando esta creado solo para owners.`)]})
-        if (this.staff === true && !msg.member.roles.cache.has(`867293184216662086`) || !msg.member.roles.cache.has(`867293184216662086`)) return msg.reply({embeds: [e.setDescription(`❌ | Este comando es exclusivo para el staff.`)]})
+        if (this.staff === true && !msg.member.roles.cache.has(`867293184216662086`) || !msg.member.roles.cache.has(`821724207816769597`)) return msg.reply({embeds: [e.setDescription(`❌ | Este comando es exclusivo para el staff.`)]})
         if (this.guildOnly === true && !msg.guild) return msg.reply({embeds: [e.setDescription(`❌ | Este comando solo esta permitido dentro de servidores.`)]})
         if (!this.status && !config.owners.includes(msg.author.id)) return msg.reply({embeds: [e.setDescription(`❌ | Comando bajo mantenimiento o desabilitado.`)]})
         if (this.checkCooldown(msg) && !config.owners.includes(msg.author.id)) {

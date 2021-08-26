@@ -28,6 +28,11 @@ export function FhotBlocker(message: Message) {
     }
 }
 
+export function HelperMC(message: Message) {
+    if (message.author.bot) return;
+    if (message.content.toLowerCase().includes(`link`) && message.content.toLowerCase().includes(`64 bits`) || message.content.toLowerCase().includes(`32 bits`)) return message.reply(`El link de descarga se encuentra en <#822541632221872189>. uwu`)
+}
+
 export async function parseEval(input) {
     const isPromise = input instanceof Promise && typeof input.then === "function" && typeof input.catch === "function";
     if (isPromise) {

@@ -1,7 +1,7 @@
 import { TempContext } from "../Util/Classes/Context"
 import { config } from "../config"
 import { Message } from "discord.js";
-import { FhotBlocker, parseQuery, pingsChannel } from "../Util/Functions/messageUtil";
+import { FhotBlocker, HelperMC, parseQuery, pingsChannel } from "../Util/Functions/messageUtil";
 import { pings } from "../Util/Functions/autoroles";
 
 const { prefix } = config;
@@ -11,6 +11,7 @@ export const run = async (bot, msg: Message) => {
     pingsChannel(msg);
     pings(msg);
     FhotBlocker(msg);
+    HelperMC(msg);
     if (msg.author.bot) return;     
     if (!msg.content.startsWith(prefix)) return;
     const message = new TempContext(bot, msg);

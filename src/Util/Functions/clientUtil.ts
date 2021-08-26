@@ -26,6 +26,9 @@ export async function richPresence(client: Client) {
     setTimeout(() => {
     client.channels.cache.get(`871853951455223818`);
     }, 10000);
+
+    client.guilds.fetch(`699200033131724870`).then(x => x.invites.fetch());
+
 }
 
 export function RateLimited(ratelimit: RateLimitData, client: Client) {

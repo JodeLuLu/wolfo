@@ -224,12 +224,18 @@ export class Members {
     }
 
     async entrante() {
-        const embed = new MessageEmbed()
+    const a = new TimeStamp(`${this.member.user.createdTimestamp}`).variable();
+
+    if (a.includes("segundo") ||a.includes("segundos") || a.includes("minuto") || a.includes("minutos") || a.includes("hora") || a.includes("horas") || a.includes("día") || a.includes("días") || a.includes("semana") || a.includes("semanas")) var sospechosa = true
+    else var sospechosa = false;
+
+         const embed = new MessageEmbed()
         .setAuthor(`${this.member.user.tag} | Ha entrado en el servidor`)
         .setThumbnail(this.member.user.displayAvatarURL())
-        .setDescription(`**Usuario:** ${this.member} (${this.member.id})\n**Creada hace:**<t:${new TimeStamp(`${this.member.user.createdTimestamp}`).OutDecimals()}:R> (dinamica)\n **Creada hace:** ${new TimeStamp(this.member.user.createdTimestamp).variable()} (estatico)\nInsignias: **${this.member.user.flags.toArray()}**`)
+        .setDescription(`**Usuario:** ${this.member} (${this.member.id})\n**Creada hace:**<t:${new TimeStamp(`${this.member.user.createdTimestamp}`).OutDecimals()}:R> (dinamica)\n **Creada hace:** ${new TimeStamp(this.member.user.createdTimestamp).variable()} (estatico)\n**Sospechosa:** ${sospechosa ? "✅" : "❌"}`)
         .setColor(0x000c912d);
 
-        this.member.client.channels.cache.get(`873313370177142795`).send({embeds: [embed]})
+        this.member.client.channels.cache.get(`873313370177142795`).send({embeds: [embed]});
+
     }
 }
