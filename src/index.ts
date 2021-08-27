@@ -6,6 +6,8 @@ import './Typings'
 
 import { uploadText } from "./Util/Functions/uploadTo"
 import { eventsCentral } from "./Util/Functions/events"
+import { REST } from "@discordjs/rest"
+import { Routes } from "discord-api-types/v9"
 
 export const consola = new Captain.Console({
     "use_colors": true,
@@ -35,5 +37,8 @@ eventsCentral(TempoClient);
 TempoClient.uploadText = uploadText
 TempoClient.commands = new Collection();
 handlers(TempoClient);
+
+
+
 
 TempoClient.login(config.auth.token);
