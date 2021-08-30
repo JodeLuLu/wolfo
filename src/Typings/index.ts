@@ -1,10 +1,12 @@
 import { Collection } from 'discord.js'
 import { BaseCommand } from '../Util/Classes/BaseCommand'
 import Captain from 'captainjs'
+import {  BaseSlashCommand } from '../Util/Classes/BaseSlashCommand'
 
 declare module 'discord.js' {
     interface Client {
         commands: Collection<string, BaseCommand>
+        slashCommands: Collection<string, BaseSlashCommand>
         uploadText: object | string
     }
 

@@ -1,4 +1,7 @@
 import { Message } from "discord.js";
+import { TempContext } from "../Classes/Context";
+import { pings } from "./autoroles";
+import {config } from "../../config"
 
 export function pingsChannel(message: Message) {
     if (message.channel.id == "871503059329646622") {
@@ -74,4 +77,35 @@ export function parseQuery(queries) {
         }
     }
     return { query, flags }
+}
+
+export function messageUtil(msg: Message) {
+    pingsChannel(msg);
+    pings(msg);
+    FhotBlocker(msg);
+    HelperMC(msg);
+    if (msg.author.bot) return; 
+    if (!msg.content.startsWith(config.prefix)) return;
+    
+    const message = new TempContext(msg.client, msg);
+
+    
+
+    message.args = msg.content.slice(config.prefix.length).trim().split(/ +/g);
+
+    const args = message.args,
+    command = args.shift().toLowerCase();
+
+    const {query, flags} = parseQuery(args);
+    message.flags = flags;
+    
+
+    let cmd = message.client.commands.get(command) || message.client.commands.find(c => c.aliases && c.aliases.includes(command))
+    if (!cmd) return;
+    if (cmd.canRun(msg, false)) return;
+
+
+    
+
+    cmd.run(message)
 }

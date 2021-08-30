@@ -24,23 +24,27 @@ export function handlers(TempoClient: Client) {
     }
     )();
 
-    (async function handleEvents(dir = "../../Events") {
+    (async function handleSlashCommands(dir = "../../Slash") {
         let files = await fs.readdir(path.join(__dirname, dir));
         for (let file of files) {
             let stat = await fs.lstat(path.join(__dirname, dir, file));
             if (stat.isDirectory()) {
-                handleEvents(path.join(dir, file));
+                handleSlashCommands(path.join(dir, file));
             } else {
-                if (!file.endsWith(".ts")) return;
-                let eventName = file.substring(0, file.indexOf(".ts"));
-                try {
-                    let event = await import(path.join(__dirname, dir, file));
-                    TempoClient.on(eventName, event.run.bind(null, TempoClient));
-                } catch (err) {
-                    console.log(`Hey, ocurrio un error tranado de iniciar el evento: ${eventName}`)
-                    console.log(err)
+                if (file.endsWith(".ts")) {
+                    let { default: Class } = await import(path.join(__dirname, dir, file));
+                    try {
+                        let slashClass = new Class(TempoClient)
+                        TempoClient.slashCommands.set(slashClass.name, slashClass);
+                    } catch (err) {
+                        console.error(err)
+                    }
                 }
             }
         }
-    })();
+    }
+    )();
+    
+
+    
 }

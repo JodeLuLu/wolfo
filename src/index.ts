@@ -4,7 +4,7 @@ import { handlers } from './Util/Functions/handlers'
 import Captain from 'captainjs'
 import './Typings'
 
-import { uploadText } from "./Util/Functions/uploadTo"
+
 import { eventsCentral } from "./Util/Functions/events"
 import { REST } from "@discordjs/rest"
 import { Routes } from "discord-api-types/v9"
@@ -34,8 +34,11 @@ process.on(`unhandledRejection`, err => {
 
 eventsCentral(TempoClient);
 
-TempoClient.uploadText = uploadText
+
 TempoClient.commands = new Collection();
+TempoClient.slashCommands = new Collection();
+
+
 handlers(TempoClient);
 
 
