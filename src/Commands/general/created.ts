@@ -1,5 +1,5 @@
 import { Client, Message, MessageEmbed } from "discord.js";
-import { BaseCommand } from "../../Util/CLasses/BaseCommand";
+import { BaseCommand } from "../../Util/Classes/BaseCommand";
 import { TempContext } from "../../Util/Classes/Context";
 import { TimeStamp } from "../../Util/Classes/time";
 import { parseQuery } from "../../Util/Functions/messageUtil";

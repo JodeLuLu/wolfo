@@ -2,7 +2,7 @@ import { REST } from "@discordjs/rest";
 import { Routes } from "discord-api-types/v9";
 import { Client, Collection } from "discord.js";
 import { consola } from "../..";
-import { BaseCommand } from "../../Util/CLasses/BaseCommand";
+import { BaseCommand } from "../../Util/Classes/BaseCommand";
 import { TempContext } from "../../Util/Classes/Context";
 import fs from "fs"
 import { limitedCommand } from "../../Util/assets/limitedSlashCommand";
