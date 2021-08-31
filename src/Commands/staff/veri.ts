@@ -1,5 +1,5 @@
 import { Client, MessageActionRow, MessageButton, MessageEmbed } from "discord.js";
-import { BaseCommand } from "../../Util/CLasses/BaseCommand";
+import { BaseCommand } from "../../Util/Classes/BaseCommand";
 import { TempContext } from "../../Util/Classes/Context";
 
 
