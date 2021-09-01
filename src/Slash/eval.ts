@@ -12,9 +12,10 @@ import { parseEval, parseQuery, parseType } from "../Util/Functions/messageUtil"
 export default class SlashEval extends BaseSlashCommand {
 constructor(client: Client) {
 super(client, {
-name: "coded",
+name: "code",
 description: "Calcula una expresion con este comando.",
 category: "dev",
+dev: true
       })
   }
 

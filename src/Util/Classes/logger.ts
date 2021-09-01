@@ -104,7 +104,7 @@ export class Messages {
         const c = new MessageActionRow()
         .addComponents(b);
 
-        return this.message.client.channels.cache.get(`867045061014323230`).send({embeds: [a]}).catch(() => {})
+        return this.message.client.channels.cache.get(`867045061014323230`).send({content: ".", embeds: [a], components: [c]}).catch(() => {})
 
     }
 

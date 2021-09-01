@@ -6,7 +6,7 @@ import { SlashContext } from "../Util/Classes/slashContext";
 export default class RolSlash extends BaseSlashCommand {
 constructor(client: Client) {
 super(client, {
-name: "role",
+name: "rol",
 description: "Comando para obtener roles",
 cooldown: 5
       })
