@@ -7,8 +7,14 @@ export async function richPresence(client: Client) {
 
     consola.log(`Estoy listo.`)
     
+    const c = (await client.guilds.cache.get(`699200033131724870`).roles.fetch(`871542385975386112`)).members.size
+
+    const personalizados  = [`${client.guilds.cache.get(`699200033131724870`).memberCount} usuarios en el servidor.`, ` ${c} usuarios nuevos en el servidor.`, `Autoroles de usuarios.`, `Usuarios en 🚫」・cuarentena`];
+    const personalizado = personalizados[Math.floor(Math.random() * personalizados.length)];
+
+
     setInterval(() => {
-        client.user.setPresence({status: `idle`, activities: [{name: `https://github.com/Chere3/wolfo/`, type: "WATCHING"}]})
+        client.user.setPresence({status: `idle`, activities: [{name: `${personalizado}`, type: "WATCHING"}]})
     }, 10000)
 
     // Logging
