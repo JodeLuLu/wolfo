@@ -9,12 +9,12 @@ import node from "node-superfetch"
 import { parseEval, parseQuery, parseType } from "../Util/Functions/messageUtil";
 
 
-export default class NameCommand extends BaseSlashCommand {
+export default class SlashEval extends BaseSlashCommand {
 constructor(client: Client) {
 super(client, {
-name: "code",
+name: "coded",
 description: "Calcula una expresion con este comando.",
-category: "dev"
+category: "dev",
       })
   }
 

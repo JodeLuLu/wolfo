@@ -30,13 +30,13 @@ async run(base: TempContext) {
           base.reply(`Estoy escaneando posibles (/ commands) y subiendolos a la API espera...`)
         
           await rest.put(
-              Routes.applicationGuildCommands(`845797782832939008`, `699200033131724870`),
+              Routes.applicationGuildCommands(`882032683243433994`, `699200033131724870`),
               {body: limitedCommand}
           );
         
-          base.reply(`El escaneo de / comandos se ha llevado satisfactoriamente y se han subido 5 comandos en total al servidor.\n\n**https://discord.com/oauth2/authorize?client_id=845797782832939008&scope=applications.commands** Aqui tienes el link para que los actulices bb hermoso precioso`)
+          base.reply(`El escaneo de / comandos se ha llevado satisfactoriamente y se han subido 5 comandos en total al servidor.\n\n**https://discord.com/oauth2/authorize?client_id=${base.client.user.id}&scope=applications.commands** Aqui tienes el link para que los actulices bb hermoso precioso`)
         } catch (error) {
-          consola.error(error);
+          base.reply(`He we, no pude subir los comandos esos, porq\n\n\`${error}\``)
         }
       })();
 
