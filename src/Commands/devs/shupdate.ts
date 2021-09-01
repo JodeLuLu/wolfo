@@ -30,7 +30,7 @@ async run(base: TempContext) {
           base.reply(`Estoy escaneando posibles (/ commands) y subiendolos a la API espera...`)
         
           await rest.put(
-              Routes.applicationGuildCommands(`882032683243433994`, `699200033131724870`),
+              Routes.applicationGuildCommands(`${base.client.user.id}`, `699200033131724870`),
               {body: limitedCommand}
           );
         
