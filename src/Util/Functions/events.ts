@@ -25,7 +25,7 @@ export function eventsCentral(client: Client) {
 
     // Member
     client.on("guildMemberUpdate", (viejo, nuevo) => {new Roles(nuevo, viejo).quitado(); new Roles(nuevo, viejo).puesto(); new Apodo(viejo, nuevo).cambiado();});
-    client.on("guildMemberAdd", (miembro) => {const a = new NewMember(miembro); a.welcomeMessage(); const b = new Members(miembro); b.entrante()});
+    client.on("guildMemberAdd", (miembro) => {const a = new NewMember(miembro);});
     
 
     } catch (e) {}

@@ -3,13 +3,12 @@ import { BaseSlashCommand } from "../Util/Classes/BaseSlashCommand";
 import { SlashContext } from "../Util/Classes/slashContext";
 
 
-export default class PingSlash extends BaseSlashCommand {
+export default class RolSlash extends BaseSlashCommand {
 constructor(client: Client) {
 super(client, {
-name: "rol",
+name: "role",
 description: "Comando para obtener roles",
-staff: false,
-cooldown: 10
+cooldown: 5
       })
   }
 

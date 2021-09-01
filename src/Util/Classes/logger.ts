@@ -52,7 +52,7 @@ export class Messages {
                     .setDescription(`> **Mensaje**\n\n**ID del mensaje:** ${this.message.id}\n**Autor del mensaje:** ${this.message.author} (${this.message.author.id})\n**Canal:**${this.message.channel} (${this.message.channel.id})\n**Creación del mensaje:** <t:${new TimeStamp(this.message.createdTimestamp).OutDecimals()}:R>\nBot: **${bott}**\n\n> **Fotografía**\n\n**Nombre de la fotografía:** ${m.name}\n**Link de la fotografía**: [Link](${m.url})\n**Tamaño de la fotografía**: ${m.height} x ${m.width} pixeles\n**ID de la imagen:** ${m.id}\n**Link permanente:** [PermaLink](${x.body.data.url})`)
                     .setTimestamp();
 
-                    this.message.client.channels.cache.get(`867045061014323230`).send({embeds: [w]}).catch(() => {})
+                    this.message.client.channels.cache.get(`867045061014323230`)
                 })
             })
         }
@@ -65,7 +65,7 @@ export class Messages {
                      .setDescription(`**Embed eliminado**\n\n**Canal:** ${this.message.channel} (${this.message.channel.id})\n**Autor:** ${this.message.author} (${this.message.author.id})\n**Creado:** <t:${new TimeStamp(this.message.createdTimestamp).OutDecimals()}:R>\n**ID del mensaje:** ${this.message.id}\nBot: **${bott}**\n**Embed:**`)
                      .setColor(0x005f1d91);
 
-                    return this.message.client.channels.cache.get(`867045061014323230`).send({embeds: [b, x]}).catch(() => {})
+                    return this.message.client.channels.cache.get(`867045061014323230`)
                 })
             }
         
@@ -77,7 +77,7 @@ export class Messages {
         .setDescription(`**Canal:** ${this.message.channel} (${this.message.channel.id})\n**Autor**: ${this.message.author} (${this.message.author.id})\n**Creado:** <t:${new TimeStamp(this.message.createdTimestamp).OutDecimals()}:R>\n**ID del mensaje:** ${this.message.id}\nBot: **${bott}**\n\n**Contenido:**\n\`\`\`${this.message.content}\`\`\``)
         .setColor(0x00b30b0b)
 
-        return this.message.client.channels.cache.get(`867045061014323230`).send({embeds: [a]}).catch(() => {})       
+        return this.message.client.channels.cache.get(`867045061014323230`)      
     }
 
     async edited() {
@@ -104,7 +104,7 @@ export class Messages {
         const c = new MessageActionRow()
         .addComponents(b);
 
-        return this.message.client.channels.cache.get(`867045061014323230`).send({content: "a", embeds: [a], components: [c]}).catch(() => {})
+        return this.message.client.channels.cache.get(`867045061014323230`)
     }
 
     async BulkDelete() {
@@ -122,7 +122,8 @@ export class Messages {
             .setDescription(`**Canal:** ${this.messages.first().channel}\n**Cantidad de mensajes:** ${this.messages.size}\n **Mensajes**:\n[Los mensajes se encuentran en este link ya que no caben aqui.](${await uploadText(`${this.messages.map(x => `${x.author.username} (${x.author.id}): ${x.content || `Embed o imagen`}`).join("\n")}`)})`)
             .setColor(0x005f1d91);
 
-            return this.messages.first().guild.channels.cache.get(`867045061014323230`).send({embeds: [c]}).catch(() => {})})
+            
+        })
             
         }
     }
@@ -157,7 +158,7 @@ export class Roles {
                     .setDescription(`**Usuario:** ${this.received} (${this.received.id})\n**Nombre:** ${rol.name} (${rol.id})\n**Cantidad de usuarios con este rol**: ${rol.members.size}\n**Mencionable**: ${mencionable}\n **Posicion:** ${rol.rawPosition}/${this.received.guild.roles.highest.position}\n\n**Rol:**\n${rol}`)
                     .setColor(0x00b30b0b);
 
-                    return this.received.guild.channels.cache.get(`867045164542590976`).send({embeds: [embed]}).catch(() => {})
+                    return this.received.guild.channels.cache.get(`867045164542590976`)
                 }
             })
         }
@@ -177,7 +178,7 @@ export class Roles {
                     .setDescription(`**Usuario:** ${this.received} (${this.received.id})\n**Nombre:** ${rol.name} (${rol.id})\n**Cantidad de usuarios con este rol**: ${rol.members.size}\n**Mencionable**: ${mencionable}\n **Posicion:** ${rol.rawPosition}/${this.received.guild.roles.highest.position}\n\n**Rol:**\n${rol}`)
                     .setColor(0x000c912d);
 
-                    return this.received.guild.channels.cache.get(`867045164542590976`).send({embeds: [embed]}).catch(() => {});
+                    return this.received.guild.channels.cache.get(`867045164542590976`)
             }})
         }
     }
@@ -205,7 +206,7 @@ export class Apodo {
        .setDescription(`**Apodo anterior:** ${this.before.nickname || `Sin apodo.`}\n**Apodo nuevo:** ${this.after.nickname || `Sin apodo.`}\n**Apodos:**\n\`\`\`${this.before.nickname || " "} => ${this.after.nickname || " "}\`\`\``)
        .setColor(0x005f1d91);
 
-       return this.before.guild.channels.cache.get(`873313370177142795`).send({embeds: [embed]}).catch(() => {});
+       return this.before.guild.channels.cache.get(`873313370177142795`)
    }
     }
 
@@ -235,7 +236,17 @@ export class Members {
         .setDescription(`**Usuario:** ${this.member} (${this.member.id})\n**Creada hace:**<t:${new TimeStamp(`${this.member.user.createdTimestamp}`).OutDecimals()}:R> (dinamica)\n **Creada hace:** ${new TimeStamp(this.member.user.createdTimestamp).variable()} (estatico)\n**Sospechosa:** ${sospechosa ? "✅" : "❌"}`)
         .setColor(0x000c912d);
 
-        this.member.client.channels.cache.get(`873313370177142795`).send({embeds: [embed]});
+        this.member.client.channels.cache.get(`868568557707989082`).send({embeds: [embed]}).catch(() => {})
 
+    }
+
+    async saliente() {
+        const embed = new MessageEmbed()
+        .setAuthor(`${this.member.user.tag} | Ha salido del servidor`)
+        .setThumbnail(this.member.user.displayAvatarURL())
+        .setDescription(`**Usuario:** ${this.member} (${this.member.id})\n**Creada hace:**<t:${new TimeStamp(`${this.member.user.createdTimestamp}`).OutDecimals()}:R> (dinamica)\n **Creada hace:** ${new TimeStamp(this.member.user.createdTimestamp).variable()} (estatico)\n**Miembro desde**`)
+        .setColor(0x000c912d);
+
+        this.member.client.channels.cache.get(`868568557707989082`).send({embeds: [embed]}).catch(() => {})
     }
 }
