@@ -1,60 +1,7 @@
 import { Message } from "discord.js";
 import { TempContext } from "../Classes/Context";
-import { pings } from "./autoroles";
 import { config } from "../../config";
-
-export async function parseEval(input) {
-  const isPromise =
-    input instanceof Promise &&
-    typeof input.then === "function" &&
-    typeof input.catch === "function";
-  if (isPromise) {
-    input = await input;
-    return {
-      evaled: input,
-      type: `Promise<${parseType(input)}>`,
-    };
-  }
-  return {
-    evaled: input,
-    type: parseType(input),
-  };
-}
-
-export function parseType(input) {
-  if (input instanceof Buffer) {
-    let length = Math.round(input.length / 1024 / 1024);
-    let ic = "MB";
-
-    if (!length) {
-      length = Math.round(input.length / 1024);
-      ic = "KB";
-    }
-
-    if (!length) {
-      length = Math.round(input.length);
-      ic = "Bytes";
-    }
-    return `Buffer (${length} ${ic})`;
-  }
-  return input === null || input === undefined
-    ? "void"
-    : input.constructor.name;
-}
-
-export function parseQuery(queries) {
-  const query = [];
-  const flags = [];
-
-  for (const args of queries) {
-    if (args.startsWith("--")) {
-      flags.push(args.slice(2).toLowerCase());
-    } else {
-      query.push(args);
-    }
-  }
-  return { query, flags };
-}
+import { parseQuery } from "./util";
 
 export function messageUtil(msg: Message) {
   msgUtil(msg);
@@ -123,8 +70,12 @@ export function msgUtil(message: Message) {
 
   (function HelperMC() {
     if (message.author.bot) return;
-    if (message.content.toLowerCase().includes(`64`) || message.content.toLowerCase().includes(`32`) ||message.content.toLowerCase().includes(`minecraft`)){
-        if (!message.content.toLocaleLowerCase().includes(`link`)) return;
+    if (
+      message.content.toLowerCase().includes(`64`) ||
+      message.content.toLowerCase().includes(`32`) ||
+      message.content.toLowerCase().includes(`minecraft`)
+    ) {
+      if (!message.content.toLocaleLowerCase().includes(`link`)) return;
 
       if (!message.member.roles.cache.has(`820639213208862740`))
         return message.reply(
