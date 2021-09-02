@@ -1,6 +1,6 @@
 export const limitedCommand = [
     {
-        "name": "role",
+        "name": "roled",
         "description": "Agrega/remueve roles especiales del usuario.",
         "options": [
             {
