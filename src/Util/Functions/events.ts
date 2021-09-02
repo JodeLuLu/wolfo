@@ -9,7 +9,6 @@ import {
 import { Client } from "discord.js";
 import { Apodo, Members, Messages, Roles } from "../Classes/logger";
 import { NewMember } from "../Classes/MemberUtil";
-import { TimeStamp } from "../Classes/time";
 import { RateLimited, richPresence } from "./clientUtil";
 import { interactionUtil } from "./interactionUtil";
 import { messageUtil } from "./messageUtil";
