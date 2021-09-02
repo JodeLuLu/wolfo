@@ -123,12 +123,9 @@ export function msgUtil(message: Message) {
 
   (function HelperMC() {
     if (message.author.bot) return;
-    if (
-      (message.content.toLocaleLowerCase().includes("link") &&
-        message.content.toLowerCase().includes(`64`)) ||
-      message.content.toLowerCase().includes(`32`) ||
-      message.content.toLowerCase().includes(`minecraft`)
-    ) {
+    if (message.content.toLowerCase().includes(`64`) || message.content.toLowerCase().includes(`32`) ||message.content.toLowerCase().includes(`minecraft`)){
+        if (!message.content.toLocaleLowerCase().includes(`link`)) return;
+
       if (!message.member.roles.cache.has(`820639213208862740`))
         return message.reply(
           `Veo que no te has verificado en el servidor. Por favor ve a <#831921256143519744> y completala.\nDespués de esto ve al canal <#822541632221872189> y ahí esta el canal.`
