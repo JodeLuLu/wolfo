@@ -189,7 +189,36 @@ export class Messages {
   }
 
   async BulkDelete() {
-    this.messages;
+    if (this.messages.map((x) => x).filter((x) => x.embeds[0]).length >= 1) {
+      this.messages
+        .map((x) => x)
+        .filter((x) => x.embeds[0])
+        .forEach(async (x) => {
+          x.embeds
+            .map((x) => x)
+            .forEach(async (m) => {
+              const a = new MessageEmbed()
+                .setAuthor(
+                  `Embed eliminado en bulkDelete`,
+                  x.author.displayAvatarURL()
+                )
+                .setDescription(
+                  `\n**Canal:** ${x.channel} (${x.channel.id})\n**Autor:** ${
+                    x.author
+                  } (${x.author.id})\n**Creado:** <t:${new TimeStamp(
+                    x.createdTimestamp
+                  ).OutDecimals()}:R>\n**ID del mensaje:** ${x.id}\nBot: **${
+                    x.author.bot ? "Si" : "No"
+                  }**\n**Embed:**`
+                )
+                .setColor(0x005f1d91);
+              this.messages
+                .first()
+                .guild.channels.cache.get(`883814515156844594`)
+                .send({ embeds: [a, m] });
+            });
+        });
+    }
 
     const c = new MessageEmbed()
       .setAuthor(`${this.messages.size} Mensajes purgueados.`)
@@ -211,7 +240,7 @@ export class Messages {
 
     this.messages
       .first()
-      .guild.channels.cache.get(`867045061014323230`)
+      .guild.channels.cache.get(`883814515156844594`)
       .send({ embeds: [c] })
       .catch(async () => {
         const a = new MessageEmbed()
@@ -233,6 +262,11 @@ export class Messages {
             )})`
           )
           .setColor(0x005f1d91);
+
+        this.messages
+          .first()
+          .guild.channels.cache.get(`883814515156844594`)
+          .send({ embeds: [a] });
       });
   }
 }
@@ -414,3 +448,5 @@ export class Members {
       .catch(() => {});
   }
 }
+
+// Put the cooldown in the map

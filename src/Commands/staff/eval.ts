@@ -15,6 +15,7 @@ import { uploadText } from "../../Util/Functions/util";
 import { TimeStamp } from "../../Util/Classes/time";
 import { NewMember } from "../../Util/Classes/MemberUtil";
 import { parseEval, parseQuery, parseType } from "../../Util/Functions/util";
+import { db } from "../..";
 
 export default class PingCommand extends BaseCommand {
   constructor(client: Client) {
@@ -40,6 +41,7 @@ export default class PingCommand extends BaseCommand {
     const newer = NewMember;
     const membed = MessageEmbed;
     const getFlags = parseQuery;
+    const postuData = db;
 
     async function send(text: object | number | string) {
       return await message.channel.send({ content: `${text}` });

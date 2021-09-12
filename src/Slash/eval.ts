@@ -7,6 +7,7 @@ import discord from "discord.js";
 import { NewMember } from "../Util/Classes/MemberUtil";
 import node from "node-superfetch";
 import { parseEval, parseQuery, parseType } from "../Util/Functions/util";
+import { db } from "..";
 
 export default class SlashEval extends BaseSlashCommand {
   constructor(client: Client) {
@@ -29,6 +30,7 @@ export default class SlashEval extends BaseSlashCommand {
     const mEmbed = MessageEmbed;
     const a = interaction;
     const getFlags = parseQuery;
+    const postuData = db;
 
     async function send(text: object | number | string) {
       return await interaction.channel.send({ content: `${text}` });
