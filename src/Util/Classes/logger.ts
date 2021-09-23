@@ -42,9 +42,14 @@ export class Messages {
     this.messages = messages;
   }
 
-  /*
-    
-    */
+  /**
+   * #function Registra los mensajes borrados.
+   * @param {Message} message Valor del mensaje, este es el mensaje borrado sacado de los eventos.
+   * @returns {Promise<Message>} Envía el mensaje al canal de logs del mensaje borrado.
+   * @example
+   * new Messages(messageDeleted).deleted();
+   */
+
   async deleted() {
     if (this.message.partial) await this.message.fetch();
 
@@ -154,6 +159,14 @@ export class Messages {
       .catch(() => {});
   }
 
+  /**
+   * @function edited Registra los mensajes editados en el servidor.
+   * @param {Message} message Valor del mensaje, este es el mensaje editado sacado de los eventos.
+   * @returns {Promise<Message>} Envía el mensaje al canal de logs del mensaje editado.
+   * @example
+   * new Messages(messageEdited, messageOld).edited();
+   */
+
   async edited() {
     if (this.message.partial) await this.message.fetch();
 
@@ -199,6 +212,14 @@ export class Messages {
       .send({ embeds: [a], components: [c] })
       .catch(() => {});
   }
+
+  /**
+   * @function BulkDelete Registra los mensajes masivamente eliminados del servidor.
+   * @param {Collection<Snowflake, Message>} message Colección de los mensajes eliminados sacados del evento.
+   * @returns {Promise<Message>} Envía el mensaje al canal de logs de los mensajes eliminados.
+   * @example
+   * new Messages(null, null, null, Messages).BulkDelete();
+   */
 
   async BulkDelete() {
     if (this.messages.map((x) => x).filter((x) => x.embeds[0]).length >= 1) {
@@ -307,6 +328,15 @@ export class Roles {
     this.reason = reason;
   }
 
+  /**
+   * @function Quitado Registra los roles quitados del usuario.
+   * @param {GuildMember} after El usuario después del cambio del evento.
+   * @param {GuildMember | PartialGuildMember} before El usuario antes del cambio en el evento.
+   * @returns {Promise<Message>} Envía el mensaje al canal de logs de los roles quitados.
+   * @example
+   * new Roles(after, before).quitado();
+   */
+
   async quitado() {
     if (this.before.roles.cache.size > this.received.roles.cache.size) {
       this.before.roles.cache.forEach(async (rol) => {
@@ -332,6 +362,15 @@ export class Roles {
       });
     }
   }
+
+  /**
+   * @function Agregado Registra los roles agregados al usuario.
+   * @param {GuildMember} after El usuario después del cambio del evento.
+   * @param {GuildMember | PartialGuildMember} before El usuario antes del cambio en el evento.
+   * @returns {Promise<Message>} Envía el mensaje al canal de logs de los roles agregados.
+   * @example
+   * new Roles(after, before).puesto();
+   */
 
   async puesto() {
     if (this.before.roles.cache.size < this.received.roles.cache.size) {
@@ -375,6 +414,15 @@ export class Apodo {
     this.after = after;
   }
 
+  /**
+   * @function Cambiado Registra el cambio de apodo del usuario.
+   * @param {GuildMember} after El usuario después del cambio del evento.
+   * @param {GuildMember | PartialGuildMember} before El usuario antes del cambio en el evento.
+   * @returns {Promise<Message>} Envía el mensaje al canal de logs de los cambios de apodo.
+   * @example
+   * new Apodo(before, after).cambiado();
+   */
+
   async cambiado() {
     if (this.before.nickname == this.after.nickname) return;
     const embed = new MessageEmbed()
@@ -413,6 +461,14 @@ export class Members {
     this.member = member;
   }
 
+  /**
+   * @function entrante Registra la entrada de un usuario.
+   * @param {GuildMember} member El usuario del evento de entrada.
+   * @returns {Promise<Message>} Envía el mensaje al canal de logs de los usuarios entrantes.
+   * @example
+   * new Members(member).entrante();
+   */
+
   async entrante() {
     const a = new TimeStamp(`${this.member.user.createdTimestamp}`).variable();
 
@@ -450,6 +506,14 @@ export class Members {
       .send({ embeds: [embed] })
       .catch(() => {});
   }
+
+  /**
+   * @function saliente Registra la salida de un usuario.
+   * @param {GuildMember} member El usuario del evento de salida.
+   * @returns {Promise<Message>} Envía el mensaje al canal de logs de los usuarios salientes.
+   * @example
+   * new Members(member).saliente();
+   */
 
   async saliente() {
     const embed = new MessageEmbed()
