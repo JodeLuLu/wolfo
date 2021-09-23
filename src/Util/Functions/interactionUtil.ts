@@ -441,14 +441,14 @@ export function intUtil(Interaction) {
         .setThumbnail(Interaction.member.user.avatarURL());
 
       Interaction.guild.channels.cache
-        .find((x) => x.name.includes(`logs`))
+        .find((x) => x.name.includes(`postu-logs`))
         .send({ embeds: [embed] })
         .catch(async () => {
           const a = chunkString(`${questions}`, 4090);
           a.map(async (x) => {
             await embed.setDescription(`Respuestas:\`\`\`${x}\`\`\``);
             await Interaction.guild.channels.cache
-              .get(`883814515156844594`)
+              .find((x) => x.name.includes(`postu-logs`))
               .send({ embeds: [embed] });
           });
         });
