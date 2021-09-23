@@ -113,7 +113,9 @@ export function intUtil(Interaction) {
 
   (async function postulaciones() {
     if (!Interaction.isButton()) return;
-    const logChannel = Interaction.guild.channels.cache.find(`logs`);
+    const logChannel = Interaction.guild.channels.cache.find((x) =>
+      x.name.includes(`logs`)
+    );
 
     if (Interaction.customId == "requisite") {
       const embed = new MessageEmbed()
