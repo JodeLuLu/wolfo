@@ -1,11 +1,16 @@
-import { config as envconfig } from 'dotenv'
+import { config as envconfig } from "dotenv";
 
-envconfig()
+envconfig();
 
 export const config = {
-    auth: {
-        token: process.env.TOKEN,
-    },
-    prefix: "=",
-    owners: ["852588734104469535", "713831778636398712", "847117740951076874", "200391563346575361"]
-}
+  auth: {
+    token: process.env.TOKEN,
+  },
+  prefix: "+",
+  owners: [
+    "852588734104469535",
+    "713831778636398712",
+    "847117740951076874",
+    "200391563346575361",
+  ],
+};
