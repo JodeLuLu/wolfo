@@ -113,8 +113,7 @@ export function intUtil(Interaction) {
 
   (async function postulaciones() {
     if (!Interaction.isButton()) return;
-    const logChannel =
-      Interaction.guild.channels.cache.get(`883814515156844594`);
+    const logChannel = Interaction.guild.channels.cache.find(`logs`);
 
     if (Interaction.customId == "requisite") {
       const embed = new MessageEmbed()
@@ -440,7 +439,7 @@ export function intUtil(Interaction) {
         .setThumbnail(Interaction.member.user.avatarURL());
 
       Interaction.guild.channels.cache
-        .get(`883814515156844594`)
+        .find((x) => x.name.includes(`logs`))
         .send({ embeds: [embed] })
         .catch(async () => {
           const a = chunkString(`${questions}`, 4090);
