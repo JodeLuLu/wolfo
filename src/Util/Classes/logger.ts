@@ -90,7 +90,10 @@ export class Messages {
               )
               .setTimestamp();
 
-            this.message.client.channels.cache.get(`867045061014323230`);
+            return this.message.client.channels.cache
+              .find((x) => x.name.includes(`mensajes`))
+              .send({ embeds: [w] })
+              .catch(() => {});
           });
       });
     }
@@ -115,7 +118,10 @@ export class Messages {
           )
           .setColor(0x005f1d91);
 
-        return this.message.client.channels.cache.get(`867045061014323230`);
+        return this.message.client.channels.cache
+          .find((x) => x.name.includes(`mensajes`))
+          .send({ embeds: [b, x] })
+          .catch(() => {});
       });
     }
 
@@ -142,7 +148,10 @@ export class Messages {
       )
       .setColor(0x00b30b0b);
 
-    return this.message.client.channels.cache.get(`867045061014323230`);
+    return this.message.client.channels.cache
+      .find((x) => x.name.includes(`mensajes`))
+      .send({ embeds: [a] })
+      .catch(() => {});
   }
 
   async edited() {
@@ -185,7 +194,10 @@ export class Messages {
 
     const c = new MessageActionRow().addComponents(b);
 
-    return this.message.client.channels.cache.get(`867045061014323230`);
+    return this.message.client.channels.cache
+      .find((x) => x.name.includes(`mensajes`))
+      .send({ embeds: [a], components: [c] })
+      .catch(() => {});
   }
 
   async BulkDelete() {
@@ -214,8 +226,9 @@ export class Messages {
                 .setColor(0x005f1d91);
               this.messages
                 .first()
-                .guild.channels.cache.get(`883814515156844594`)
-                .send({ embeds: [a, m] });
+                .client.channels.cache.find((x) => x.name.includes(`mensajes`))
+                .send({ embeds: [a, m] })
+                .catch(() => {});
             });
         });
     }
@@ -240,8 +253,9 @@ export class Messages {
 
     this.messages
       .first()
-      .guild.channels.cache.get(`883814515156844594`)
+      .client.channels.cache.find((x) => x.name.includes(`mensajes`))
       .send({ embeds: [c] })
+      .catch(() => {})
       .catch(async () => {
         const a = new MessageEmbed()
           .setAuthor(`${this.messages.size} Mensajes purgueados`)
@@ -265,8 +279,9 @@ export class Messages {
 
         this.messages
           .first()
-          .guild.channels.cache.get(`883814515156844594`)
-          .send({ embeds: [a] });
+          .client.channels.cache.find((x) => x.name.includes(`mensajes`))
+          .send({ embeds: [a] })
+          .catch(() => {});
       });
   }
 }
@@ -309,7 +324,10 @@ export class Roles {
             )
             .setColor(0x00b30b0b);
 
-          return this.received.guild.channels.cache.get(`867045164542590976`);
+          return this.received.guild.channels.cache
+            .find((x) => x.name.includes(`roles`))
+            .send({ embeds: [embed] })
+            .catch(() => {});
         }
       });
     }
@@ -332,7 +350,10 @@ export class Roles {
             )
             .setColor(0x000c912d);
 
-          return this.received.guild.channels.cache.get(`867045164542590976`);
+          return this.received.guild.channels.cache
+            .find((x) => x.name.includes(`roles`))
+            .send({ embeds: [embed] })
+            .catch(() => {});
         }
       });
     }
@@ -372,7 +393,10 @@ export class Apodo {
       )
       .setColor(0x005f1d91);
 
-    return this.before.guild.channels.cache.get(`873313370177142795`);
+    return this.before.guild.channels.cache
+      .find((x) => x.name.includes(`logs-test`))
+      .send({ embeds: [embed] })
+      .catch(() => {});
   }
 }
 
@@ -422,7 +446,7 @@ export class Members {
       .setColor(0x000c912d);
 
     this.member.client.channels.cache
-      .get(`868568557707989082`)
+      .find((x) => x.name.includes(`logs-test`))
       .send({ embeds: [embed] })
       .catch(() => {});
   }
@@ -443,7 +467,7 @@ export class Members {
       .setColor(0x000c912d);
 
     this.member.client.channels.cache
-      .get(`868568557707989082`)
+      .find((x) => x.name.includes(`logs-test`))
       .send({ embeds: [embed] })
       .catch(() => {});
   }
