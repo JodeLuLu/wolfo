@@ -4,6 +4,9 @@ import os from "os";
 import typescript from "typescript";
 import { VERSION } from "ts-node";
 import { db } from "../..";
+import { TimeStamp } from "../Classes/time";
+import { chunkString } from "./util";
+import { postulationData } from "../../Typings";
 
 export function interactionUtil(Interaction: Interaction) {
   intUtil(Interaction);
@@ -110,6 +113,8 @@ export function intUtil(Interaction) {
 
   (async function postulaciones() {
     if (!Interaction.isButton()) return;
+    const logChannel =
+      Interaction.guild.channels.cache.get(`883814515156844594`);
 
     if (Interaction.customId == "requisite") {
       const embed = new MessageEmbed()
@@ -122,19 +127,59 @@ export function intUtil(Interaction) {
         )
         .setColor(Interaction.guild.me.displayColor);
 
+      if (db.exists(`/${Interaction.member.id}/answers_of_questions`)) {
+        Interaction.reply({
+          content:
+            "> Una vez que te has postulado, ya no puedes ver los requisitos para ser staff.",
+          ephemeral: true,
+        });
+
+        return logChannel.send(
+          `> ${Interaction.member} Ha tratado de ver los requisitos, pero no se los he mostrado debido a que ya hizo el cuestionario para ser staff.`
+        );
+      } else if (
+        db.exists(`/${Interaction.member.id}/see_the_require`) &&
+        db.getData(`/${Interaction.member.id}/see_the_require`) == true
+      ) {
+        logChannel.send(
+          `> **${Interaction.member}** Ha tratado de ver los requisitos, pero no se los he mostrado debido a que ya los consulto antes.`
+        );
+        return Interaction.reply({
+          content: "> No puedes ver los requisitos por segunda vez.",
+          ephemeral: true,
+        });
+      }
+
       db.push(`users/${Interaction.user.id}`, {
         see_the_require: true,
       });
 
+      logChannel.send(
+        `> **${Interaction.member}** Ha visto los requisitos para la postulación de staff.`
+      );
       Interaction.reply({ embeds: [embed], ephemeral: true });
     }
 
     if (Interaction.customId == "questions") {
+      if (db.exists(`/${Interaction.member.id}/answers_of_questions`)) {
+        logChannel.send(
+          `> ${Interaction.member} Ha tratado de postularse, cuando ya lo hizo anteriormente.`
+        );
+        return Interaction.reply({
+          content: `Ya te has postulado anteriormente, por lo cuál ya no puedes hacerlo.`,
+          ephemeral: true,
+        });
+      }
+      const startTime = Date.now();
       const a = await Interaction.user
         .send(
           `¡Hola! Bienvenido a las postulaciones del servidor. Por favor contesta las preguntas preguntas con seriedad.Para contestar cada pregunta tienes \`2 minutos\`. Empezaremos con algo sencillo\n\n> __***Cuántos años tienes?***__`
         )
         .catch(() => {
+          logChannel.send(
+            `> Ha tratado de hacer el cuestionario, pero debido a que tenía los MDS cerrados, no he podido hacerlo.`
+          );
+
           return Interaction.reply({
             content: `${Interaction.member} por favor activa tus MDS para poder enviarte el cuestionario por mensajes privados. Cuando los actives por favor sigue con el cuestionario que se te dio por mensajes privados.`,
             ephemeral: true,
@@ -146,6 +191,10 @@ export function intUtil(Interaction) {
         ephemeral: true,
       });
 
+      logChannel.send(
+        `> ${Interaction.member} ha empezado el cuestionario para ser staff.`
+      );
+
       const filter = (m) => m.author.bot === false;
       const awaiter1 = await a.channel.awaitMessages({
         filter,
@@ -154,6 +203,9 @@ export function intUtil(Interaction) {
       });
 
       if (!awaiter1.size) {
+        logChannel.send(
+          `> ${Interaction.member} Estaba haciendo el cuestionario para ser staff. Pero cuando estaba haciendo el cuestionario, **se le acabo el tiempo en la pregunta 1**.`
+        );
         return Interaction.member.send(
           `__**El tiempo limite para las preguntas ha caducado.**__`
         );
@@ -169,6 +221,9 @@ export function intUtil(Interaction) {
       });
 
       if (!awaiter2.size) {
+        logChannel.send(
+          `> ${Interaction.member} Estaba haciendo el cuestionario para ser staff. Pero cuando estaba haciendo el cuestionario, **se le acabo el tiempo en la pregunta 2**.`
+        );
         return Interaction.member.send(
           `__**El tiempo limite para las preguntas ha caducado.**__`
         );
@@ -184,6 +239,9 @@ export function intUtil(Interaction) {
       });
 
       if (!awaiter3.size) {
+        logChannel.send(
+          `> ${Interaction.member} Estaba haciendo el cuestionario para ser staff. Pero cuando estaba haciendo el cuestionario, **se le acabo el tiempo en la pregunta 3**.`
+        );
         return Interaction.member.send(
           `__**El tiempo limite para las preguntas ha caducado.**__`
         );
@@ -199,6 +257,9 @@ export function intUtil(Interaction) {
       });
 
       if (!awaiter4.size) {
+        logChannel.send(
+          `> ${Interaction.member} Estaba haciendo el cuestionario para ser staff. Pero cuando estaba haciendo el cuestionario, **se le acabo el tiempo en la pregunta 4**.`
+        );
         return Interaction.member.send(
           `__**El tiempo limite para las preguntas ha caducado.**__`
         );
@@ -214,6 +275,9 @@ export function intUtil(Interaction) {
       });
 
       if (!awaiter5.size) {
+        logChannel.send(
+          `> ${Interaction.member} Estaba haciendo el cuestionario para ser staff. Pero cuando estaba haciendo el cuestionario, **se le acabo el tiempo en la pregunta 5**.`
+        );
         return Interaction.member.send(
           `__**El tiempo limite para las preguntas ha caducado.**__`
         );
@@ -231,6 +295,10 @@ export function intUtil(Interaction) {
       });
 
       if (!awaiter6.size) {
+        logChannel.send(
+          `> ${Interaction.member} Estaba haciendo el cuestionario para ser staff. Pero cuando estaba haciendo el cuestionario, **se le acabo el tiempo en la pregunta 6**.`
+        );
+
         return Interaction.member.send(
           `__**El tiempo limite para las preguntas ha caducado.**__`
         );
@@ -246,6 +314,9 @@ export function intUtil(Interaction) {
       });
 
       if (!awaiter7.size) {
+        logChannel.send(
+          `> ${Interaction.member} Estaba haciendo el cuestionario para ser staff. Pero cuando estaba haciendo el cuestionario, **se le acabo el tiempo en la pregunta 7**.`
+        );
         return Interaction.member.send(
           `__**El tiempo limite para las preguntas ha caducado.**__`
         );
@@ -262,6 +333,10 @@ export function intUtil(Interaction) {
       });
 
       if (!awaiter8.size) {
+        logChannel.send(
+          `> ${Interaction.member} Estaba haciendo el cuestionario para ser staff. Pero cuando estaba haciendo el cuestionario, **se le acabo el tiempo en la pregunta 8**.`
+        );
+
         return Interaction.member.send(
           `__**El tiempo limite para las preguntas ha caducado.**__`
         );
@@ -278,6 +353,10 @@ export function intUtil(Interaction) {
       });
 
       if (!awaiter9.size) {
+        logChannel.send(
+          `> ${Interaction.member} Estaba haciendo el cuestionario para ser staff. Pero cuando estaba haciendo el cuestionario, **se le acabo el tiempo en la pregunta 9**.`
+        );
+
         return Interaction.member.send(
           `__**El tiempo limite para las preguntas ha caducado.**__`
         );
@@ -287,19 +366,91 @@ export function intUtil(Interaction) {
         `**¡Gracias!**\n\nTus respuestas sido puestas en la cola, y pronto se revisarán. Suerte!\n\n\n***Al completar esta encuesta estas de acuerdo con el almacenamiento de todos tus datos, sean privados o no, estos datos solo tendrá acceso el STAFF, el cambio de estos terminos de distribucion de datos puede ser en cualquier momento; E igualmente estos terminos de servicio necesarios para su funcionamiento***`
       );
 
-      db.push(`/${Interaction.member.id}`, {
-        answers_of_questions: {
-          question1: awaiter1.first().content,
-          question2: awaiter2.first().content,
-          question3: awaiter3.first().content,
-          question4: awaiter4.first().content,
-          question5: awaiter5.first().content,
-          question6: awaiter6.first().content,
-          question7: awaiter7.first().content,
-          question8: awaiter8.first().content,
-          question9: awaiter9.first().content,
-        },
-      });
+      if (db.exists(`/${Interaction.member.id}/see_the_require`)) {
+        db.push(`/${Interaction.member.id}`, {
+          see_the_require: true,
+          timeInAnswer: startTime,
+          answers_of_questions: {
+            question1: awaiter1.first().content,
+            question2: awaiter2.first().content,
+            question3: awaiter3.first().content,
+            question4: awaiter4.first().content,
+            question5: awaiter5.first().content,
+            question6: awaiter6.first().content,
+            question7: awaiter7.first().content,
+            question8: awaiter8.first().content,
+            question9: awaiter9.first().content,
+          },
+        });
+      } else {
+        db.push(`/${Interaction.member.id}`, {
+          see_the_require: false,
+          timeInAnswer: startTime,
+          answers_of_questions: {
+            question1: awaiter1.first().content,
+            question2: awaiter2.first().content,
+            question3: awaiter3.first().content,
+            question4: awaiter4.first().content,
+            question5: awaiter5.first().content,
+            question6: awaiter6.first().content,
+            question7: awaiter7.first().content,
+            question8: awaiter8.first().content,
+            question9: awaiter9.first().content,
+          },
+        });
+      }
+
+      const info: postulationData = await db.getData(
+        `/${Interaction.member.id}`
+      );
+      const questions = `- ¿Cuantos años tienes?\n${info.answers_of_questions.question1}\n\n- ¿Por qué quieres ser parte del staff del servidor?\n${info.answers_of_questions.question2}\n\n- ¿Eres activo en el servidor?\n${info.answers_of_questions.question3}\n\n- ¿Cuánto tiempo llevas en el servidor?\n${info.answers_of_questions.question4}\n\n- ¿Estarías dispuesto a moderar contenido NSFW en el servidor?\n${info.answers_of_questions.question5}\n\n- ¿Por qué te debemos de elegir a ti y no a las <numero random> personas que se postularon?\n${info.answers_of_questions.question6}\n\n- Menciona los comandos básicos de moderación\n${info.answers_of_questions.question7}\n\n- Si wolfy se peleará en general, ¿que harías?\n${info.answers_of_questions.question8}\n\n- Si un usuario enviará en general, ¿que harías?\n${info.answers_of_questions.question9}`;
+
+      const embed = new MessageEmbed()
+        .setAuthor(
+          `Nueva postulación de ${
+            Interaction.member.nickname +
+              "#" +
+              Interaction.user.discriminator || Interaction.user.username
+          }`
+        )
+        .setDescription(
+          `**Usuario**: ${Interaction.member} (${
+            Interaction.member.id
+          })\n**Lleva en el servidor desde:** <t:${new TimeStamp(
+            Interaction.member.joinedTimestamp
+          ).OutDecimals()}:d> <t:${new TimeStamp(
+            Interaction.member.joinedTimestamp
+          ).OutDecimals()}:t> **<t:${new TimeStamp(
+            Interaction.member.joinedTimestamp
+          ).OutDecimals()}:R>**\n**Creo su cuenta desde:** <t:${new TimeStamp(
+            Interaction.user.createdTimestamp
+          ).OutDecimals()}:d> <t:${new TimeStamp(
+            Interaction.user.createdTimestamp
+          ).OutDecimals()}:t> **<t:${new TimeStamp(
+            Interaction.user.createdTimestamp
+          ).OutDecimals()}:R>**\n\n**Vió los requisitos?:** ${
+            info.see_the_require ? "Sí" : "No"
+          }\n**¿Cuánto tiempo tardo en llenar el formulario?**: ${new TimeStamp(
+            info.timeInAnswer
+          )
+            .variable()
+            .slice(4)}\n**Respuestas:**\n\`\`\`${questions}\`\`\``
+        )
+        .setColor("GREEN")
+        .setThumbnail(Interaction.member.user.avatarURL());
+
+      Interaction.guild.channels.cache
+        .get(`883814515156844594`)
+        .send({ embeds: [embed] })
+        .catch(async () => {
+          const a = chunkString(`${questions}`, 4090);
+          a.map(async (x) => {
+            await embed.setDescription(`Respuestas:\`\`\`${x}\`\`\``);
+            await Interaction.guild.channels.cache
+              .get(`883814515156844594`)
+              .send({ embeds: [embed] });
+          });
+        });
     }
   })();
 }

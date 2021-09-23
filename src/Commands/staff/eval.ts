@@ -11,7 +11,7 @@ import {
 } from "discord.js";
 import discord from "discord.js";
 import node from "node-superfetch";
-import { uploadText } from "../../Util/Functions/util";
+import { chunkString, getChunk, uploadText } from "../../Util/Functions/util";
 import { TimeStamp } from "../../Util/Classes/time";
 import { NewMember } from "../../Util/Classes/MemberUtil";
 import { parseEval, parseQuery, parseType } from "../../Util/Functions/util";
@@ -42,6 +42,8 @@ export default class PingCommand extends BaseCommand {
     const membed = MessageEmbed;
     const getFlags = parseQuery;
     const postuData = db;
+    const divideString = chunkString;
+    const SplitString = getChunk;
 
     async function send(text: object | number | string) {
       return await message.channel.send({ content: `${text}` });

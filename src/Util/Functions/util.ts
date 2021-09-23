@@ -57,3 +57,19 @@ export async function uploadText(text: string) {
   const { body } = await node.post("https://paste.mod.gg/documents").send(text);
   return `https://paste.mod.gg/${body.key}`;
 }
+
+// Divide a string into chunks of a given length
+export function chunkString(str, length) {
+  return str.match(new RegExp(`.{1,${length}}`, "g"));
+}
+
+// Give the string divided in same parts of a lenght of the given length
+export function getChunk(str, length) {
+  const chunks = [];
+  let i = 0;
+  while (i < str.length) {
+    chunks.push(str.substr(i, length));
+    i += length;
+  }
+  return chunks;
+}

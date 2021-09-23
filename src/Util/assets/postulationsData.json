@@ -1,15 +1,17 @@
 {
     "852588734104469535": {
+        "see_the_require": false,
+        "timeInAnswer": 1632377859332,
         "answers_of_questions": {
-            "question1": "12",
-            "question2": "Por q djakdgshjad el minekarsh esta bien chido UwU",
-            "question3": "shi",
-            "question4": "1 día djksahdhgsadjsa",
-            "question5": "shi",
-            "question6": "por que djkasda",
-            "question7": "nose",
-            "question8": "banearlo uwu",
-            "question9": "nada"
+            "question1": "Tengo x años",
+            "question2": "Por que creo que soy capaz de... respuesta de ejemplo tipo 3. lorem ipsum dolor lorem ipsum dolor lorem ipsum dolor lorem ipsum dolor lorem ipsum dolor lorem ipsum dolor lorem ipsum dolor lorem ipsum dolor lorem ipsum dolor lorem ipsum dolor lorem ipsum dolor lorem ipsum dolor lorem ipsum dolor lorem ipsum dolor lorem ipsum dolorlorem ipsum dolor lorem ipsum dolor",
+            "question3": "Sí",
+            "question4": "8 meses",
+            "question5": "Sí",
+            "question6": "Por que creo que soy más capaz que todos",
+            "question7": "-ban\n-warn\n-mute",
+            "question8": "Le pegaría",
+            "question9": "Lo banearía"
         }
     }
 }
