@@ -4,39 +4,40 @@ import { consola } from "../..";
 import { TimeStamp } from "../Classes/time";
 
 export async function richPresence(client: Client) {
+  consola.log(`Estoy listo.`);
 
-    consola.log(`Estoy listo.`)
-    
-    const c = (await client.guilds.cache.get(`699200033131724870`).roles.fetch(`871542385975386112`)).members.size
+  setInterval(() => {
+    client.user.setPresence({
+      status: `idle`,
+      activities: [
+        { name: `https://github.com/Chere3/wolfo/`, type: "WATCHING" },
+      ],
+    });
+  }, 10000);
 
-    const personalizados  = [`${client.guilds.cache.get(`699200033131724870`).memberCount} usuarios en el servidor.`, ` ${c} usuarios nuevos en el servidor.`, `Autoroles de usuarios.`, `Usuarios en 🚫」・cuarentena`];
-    const personalizado = personalizados[Math.floor(Math.random() * personalizados.length)];
-
-
-    setInterval(() => {
-        client.user.setPresence({status: `idle`, activities: [{name: `${personalizado}`, type: "WATCHING"}]})
-    }, 10000)
-
-    // Logging
-    const a = new MessageEmbed()
+  // Logging
+  const a = new MessageEmbed()
     .setAuthor(`Bot encendido/reiniciado`)
-    .setColor(0x00FF00)
-    .setDescription(`**Ping:** ${client.ws.ping}ms\n**Uptime:** <t:${new TimeStamp(client.readyTimestamp).OutDecimals()}:R>\n**Comandos:** Cargados correctamente ✅`);
-    
-    setTimeout(() => {
+    .setColor(0x00ff00)
+    .setDescription(
+      `**Ping:** ${client.ws.ping}ms\n**Uptime:** <t:${new TimeStamp(
+        client.readyTimestamp
+      ).OutDecimals()}:R>\n**Comandos:** Cargados correctamente ✅`
+    );
+
+  setTimeout(() => {
     client.channels.cache.get(`871853951455223818`);
-    }, 10000);
-
-    client.guilds.fetch(`699200033131724870`).then(x => x.invites.fetch());
-
+  }, 10000);
 }
 
 export function RateLimited(ratelimit: RateLimitData, client: Client) {
-    const b = new MessageEmbed()
+  const b = new MessageEmbed()
     .setAuthor(`He sido ratelimiteado`)
     .setColor(0x00c6cc0c)
-    .setDescription(`**Limite permitido:** ${ratelimit.limit}\n **Metodo:** ${ratelimit.method}\n**Directorio en el servidor:** ${ratelimit.path}\n**Timeout:** ${ratelimit.timeout}\n**Diferencia de tiempo:**`)
+    .setDescription(
+      `**Limite permitido:** ${ratelimit.limit}\n **Metodo:** ${ratelimit.method}\n**Directorio en el servidor:** ${ratelimit.path}\n**Timeout:** ${ratelimit.timeout}\n**Diferencia de tiempo:**`
+    )
     .setTimestamp();
 
-    client.channels.cache.get(`871853951455223818`);
+  client.channels.cache.get(`871853951455223818`);
 }
