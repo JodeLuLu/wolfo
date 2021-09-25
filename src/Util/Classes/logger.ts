@@ -8,11 +8,8 @@ import {
   GuildMember,
   Message,
   MessageEmbed,
-  Role,
   Snowflake,
   User,
-  Util,
-  WebhookClient,
 } from "discord.js";
 import { uploadText } from "../Functions/util";
 import { TimeStamp } from "./time";
@@ -53,10 +50,6 @@ export class Messages {
   async deleted() {
     if (this.message.partial) await this.message.fetch();
 
-    if (this.message.author.bot == true) var bott = "Si";
-    if (this.message.author.bot == false) bott = "No";
-    if (this.message.author.bot == null) bott = "Sin datos";
-
     if (this.message.attachments.first()) {
       var mapita = this.message.attachments.map((mapita) => mapita);
       mapita.forEach((m) => {
@@ -83,7 +76,9 @@ export class Messages {
                   this.message.channel.id
                 })\n**Creación del mensaje:** <t:${new TimeStamp(
                   this.message.createdTimestamp
-                ).OutDecimals()}:R>\nBot: **${bott}**\n\n> **Fotografía**\n\n**Nombre de la fotografía:** ${
+                ).OutDecimals()}:R>\nBot: **${
+                  this.message.author.bot ? "Sí" : "No"
+                }**\n\n> **Fotografía**\n\n**Nombre de la fotografía:** ${
                   m.name
                 }\n**Link de la fotografía**: [Link](${
                   m.url
@@ -119,14 +114,56 @@ export class Messages {
               this.message.createdTimestamp
             ).OutDecimals()}:R>\n**ID del mensaje:** ${
               this.message.id
-            }\nBot: **${bott}**\n**Embed:**`
+            }\nBot: **${this.message.author.bot ? "Sí" : "No"}**\n**Embed:**`
           )
-          .setColor(0x005f1d91);
+          .setColor(`DARK_BLUE`)
+          .setAuthor(`${this.message.author.tag}`);
 
         return this.message.client.channels.cache
           .find((x) => x.name.includes(`mensajes`))
           .send({ embeds: [b, x] })
           .catch(() => {});
+      });
+    }
+
+    if (this.message.stickers.size > 0) {
+      this.message.stickers.forEach(async (x) => {
+        await x.fetch();
+        await x.fetchPack();
+        await x.fetchUser();
+
+        const w = new MessageEmbed()
+          .setDescription(
+            `> **Mensaje**\n\n**ID del mensaje:** ${
+              this.message.id
+            }\n**Autor del mensaje:** ${this.message.author} (${
+              this.message.author.id
+            })\n**Canal:**${this.message.channel} (${
+              this.message.channel.id
+            })\n**Creación del mensaje:** <t:${new TimeStamp(
+              this.message.createdTimestamp
+            ).OutDecimals()}:R>\nBot: **${
+              this.message.author.bot ? "Sí" : "No"
+            }**\n\n> **Sticker**\n\n**Nombre:** ${
+              x.name ?? "No encontrado."
+            }\n**Formato:** ${x.format ?? "No encontrado."}\n**Tags:** ${
+              x.tags ?? "No tiene."
+            }\n**Descripción:** ${
+              x.description ?? "No tiene."
+            }\n**Id del pack:** ${
+              x.packId ?? "No tiene."
+            }\n**Creador de la sticker:** ${x.user} (${
+              x.user.id
+            })\n**Disponible:** ${
+              x.available ? "Sí" : "No"
+            }\n**Link de la sticker:** [Link de la sticker](${x.url})`
+          )
+          .setImage(x.url)
+          .setColor(0x005f1d91);
+
+        return this.message.client.channels.cache
+          .find((x) => x.name.includes(`logs-test`))
+          .send({ embeds: [w] });
       });
     }
 
@@ -145,11 +182,9 @@ export class Messages {
           this.message.author.id
         })\n**Creado:** <t:${new TimeStamp(
           this.message.createdTimestamp
-        ).OutDecimals()}:R>\n**ID del mensaje:** ${
-          this.message.id
-        }\nBot: **${bott}**\n\n**Contenido:**\n\`\`\`${
-          this.message.content
-        }\`\`\``
+        ).OutDecimals()}:R>\n**ID del mensaje:** ${this.message.id}\nBot: **${
+          this.message.author.bot ? "Sí" : "No"
+        }**\n\n**Contenido:**\n\`\`\`${this.message.content}\`\`\``
       )
       .setColor(0x00b30b0b);
 
