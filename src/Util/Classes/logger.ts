@@ -159,7 +159,11 @@ export class Messages {
             }\n**Link de la sticker:** [Link de la sticker](${x.url})`
           )
           .setImage(x.url)
-          .setColor(0x005f1d91);
+          .setColor(0x005f1d91)
+          .setAuthor(
+            `${this.message.author.tag} | Sticker eliminada`,
+            this.message.author.displayAvatarURL({ dynamic: true })
+          );
 
         return this.message.client.channels.cache
           .find((x) => x.name.includes(`logs-test`))
@@ -505,23 +509,6 @@ export class Members {
    */
 
   async entrante() {
-    const a = new TimeStamp(`${this.member.user.createdTimestamp}`).variable();
-
-    if (
-      a.includes("segundo") ||
-      a.includes("segundos") ||
-      a.includes("minuto") ||
-      a.includes("minutos") ||
-      a.includes("hora") ||
-      a.includes("horas") ||
-      a.includes("día") ||
-      a.includes("días") ||
-      a.includes("semana") ||
-      a.includes("semanas")
-    )
-      var sospechosa = true;
-    else var sospechosa = false;
-
     const embed = new MessageEmbed()
       .setAuthor(`${this.member.user.tag} | Ha entrado en el servidor`)
       .setThumbnail(this.member.user.displayAvatarURL())
@@ -532,7 +519,7 @@ export class Members {
           `${this.member.user.createdTimestamp}`
         ).OutDecimals()}:R> (dinamica)\n **Creada hace:** ${new TimeStamp(
           this.member.user.createdTimestamp
-        ).variable()} (estatico)\n**Sospechosa:** ${sospechosa ? "✅" : "❌"}`
+        ).variable()} (estatico)`
       )
       .setColor(0x000c912d);
 
@@ -571,5 +558,3 @@ export class Members {
       .catch(() => {});
   }
 }
-
-// Put the cooldown in the map
