@@ -53,7 +53,11 @@ export function eventsCentral(client: Client) {
       new Apodo(viejo, nuevo).cambiado();
     });
     client.on("guildMemberAdd", (miembro) => {
-      const a = new NewMember(miembro);
+      new Members(miembro).entrante();
+    });
+
+    client.on("guildMemberRemove", (miembro) => {
+      new Members(miembro).saliente();
     });
   } catch (e) {}
 }

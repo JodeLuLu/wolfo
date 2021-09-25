@@ -544,13 +544,15 @@ export class Members {
       .setDescription(
         `**Usuario:** ${this.member} (${
           this.member.id
-        })\n**Creada hace:**<t:${new TimeStamp(
-          `${this.member.user.createdTimestamp}`
-        ).OutDecimals()}:R> (dinamica)\n **Creada hace:** ${new TimeStamp(
+        })\n**Creada hace:** ${new TimeStamp(
           this.member.user.createdTimestamp
-        ).variable()} (estatico)\n**Miembro desde**`
+        ).variable()} (estatico)\n**Miembro desde:** ${new TimeStamp(
+          this.member.joinedTimestamp
+        ).variable()}\n**Roles:**\n ${this.member.roles.cache
+          .map((x) => `${x}`)
+          .join(" ,")}`
       )
-      .setColor(0x000c912d);
+      .setColor(`DARK_RED`);
 
     this.member.client.channels.cache
       .find((x) => x.name.includes(`logs-test`))
