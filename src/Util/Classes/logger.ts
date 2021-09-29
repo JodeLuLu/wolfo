@@ -1,4 +1,5 @@
 import {
+  GuildBan,
   MessageActionRow,
   MessageButton,
   PartialGuildMember,
@@ -214,6 +215,7 @@ export class Messages {
     if (this.message.author.bot == null) bott = "Sin datos";
 
     if (this.message.content.length == 0) return;
+    if (this.message.content == this.message2.content) return;
 
     const a = new MessageEmbed()
       .setAuthor(
@@ -546,7 +548,7 @@ export class Members {
           this.member.id
         })\n**Creada hace:** ${new TimeStamp(
           this.member.user.createdTimestamp
-        ).variable()} (estatico)\n**Miembro desde:** ${new TimeStamp(
+        ).variable()}\n**Miembro desde:** ${new TimeStamp(
           this.member.joinedTimestamp
         ).variable()}\n**Roles:**\n ${this.member.roles.cache
           .map((x) => `${x}`)
@@ -555,6 +557,104 @@ export class Members {
       .setColor(`DARK_RED`);
 
     this.member.client.channels.cache
+      .find((x) => x.name.includes(`logs-test`))
+      .send({ embeds: [embed] })
+      .catch(() => {});
+  }
+}
+
+/**
+ * @class Esta clase se encarga de registrar los miembros baneados y desbaneados del servidor.
+ * @argument {GuildMember} member El miembro baneado/desbenado
+ */
+
+export class Bans {
+  ban: GuildBan;
+
+  // Constructor de los baneos
+  constructor(ban: GuildBan) {
+    this.ban = ban;
+  }
+
+  /**
+   * @function Banned registra la persona baneada del servidor y lo manda a los logs.
+   * @param {GuildBan} banned Los datos conjuntos del baneo.
+   * @returns {Promise<Message>} Envía el mensaje al canal de logs de los baneos.
+   * @example
+   * // Ejemplo del baneo del servidor.
+   * new Bans(ban).Banned();
+   */
+
+  async banned() {
+    await this.ban.fetch();
+    const banlogs = (
+      await (
+        await this.ban.client.guilds.fetch(`699200033131724870`)
+      ).fetchAuditLogs({ type: "MEMBER_BAN_ADD" })
+    ).entries;
+    const log = banlogs.find((x: any) => x.target.id == this.ban.user.id);
+
+    const embed = new MessageEmbed()
+      .setAuthor(`${this.ban.user.tag} | Ha sido baneado del servidor`)
+      .setThumbnail(this.ban.user.displayAvatarURL())
+      .setDescription(
+        `**Usuario**: ${this.ban.user} (${
+          this.ban.user.id
+        })\n**Cuenta del baneado creada hace:** <t:${new TimeStamp(
+          this.ban.user.createdTimestamp
+        ).OutDecimals()}:R>\n**Baneado hace:** <t:${new TimeStamp(
+          Date.now()
+        ).OutDecimals()}:R>\n **Razón del baneo:**${
+          this.ban.reason ?? "No se ha dado razon"
+        }`
+      )
+      .setColor(`RED`);
+
+    if (log.executor.tag) {
+      embed.setFooter(
+        `Baneado por ${log.executor.tag}`,
+        log.executor.displayAvatarURL()
+      );
+    }
+
+    this.ban.client.channels.cache
+      .find((x) => x.name.includes(`logs-test`))
+      .send({ embeds: [embed] })
+      .catch(() => {});
+  }
+
+  async unbanned() {
+    const banlogs = (
+      await (
+        await this.ban.client.guilds.fetch(`699200033131724870`)
+      ).fetchAuditLogs({ type: "MEMBER_BAN_REMOVE" })
+    ).entries;
+    const log = banlogs.find((x: any) => x.target.id == this.ban.user.id);
+
+    const embed = new MessageEmbed()
+      .setAuthor(`${this.ban.user.tag} | Ha sido desbaneado del servidor`)
+      .setThumbnail(this.ban.user.displayAvatarURL())
+      .setDescription(
+        `**Usuario**: ${this.ban.user} (${
+          this.ban.user.id
+        })\n**Cuenta del desbaneado creada hace:** ${new TimeStamp(
+          this.ban.user.createdTimestamp
+        ).variable()}\n**Desbaneado hace:** <t:${new TimeStamp(
+          Date.now()
+        ).OutDecimals()}:R>\n **Razón del desbaneo:** ${
+          this.ban.reason ?? "No se ha dado razon"
+        }`
+      )
+      .setColor(`GREEN`);
+
+    if (log.executor) {
+      embed.setFooter(
+        `Desbaneado por ${log.executor.tag}`,
+        log.executor.displayAvatarURL()
+      );
+    }
+
+    this.ban.client.channels.cache
       .find((x) => x.name.includes(`logs-test`))
       .send({ embeds: [embed] })
       .catch(() => {});
