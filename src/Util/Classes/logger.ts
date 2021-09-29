@@ -379,6 +379,13 @@ export class Roles {
    */
 
   async quitado() {
+    const auditLogs = (
+      await this.received.guild.fetchAuditLogs({ type: "MEMBER_ROLE_UPDATE" })
+    ).entries;
+    const auditlog = auditLogs.find(
+      (x: any) => x.target.id == this.received.user.id
+    );
+
     if (this.before.roles.cache.size > this.received.roles.cache.size) {
       this.before.roles.cache.forEach(async (rol) => {
         if (!this.received.roles.cache.has(rol.id)) {
@@ -395,8 +402,15 @@ export class Roles {
             )
             .setColor(0x00b30b0b);
 
+          if (auditlog.executor.id) {
+            embed.setFooter(
+              `Removido por ${auditlog.executor.tag}`,
+              auditlog.executor.displayAvatarURL()
+            );
+          }
+
           return this.received.guild.channels.cache
-            .find((x) => x.name.includes(`roles`))
+            .find((x) => x.name.includes(`logs-test`))
             .send({ embeds: [embed] })
             .catch(() => {});
         }
@@ -414,6 +428,12 @@ export class Roles {
    */
 
   async puesto() {
+    const auditLogs = (
+      await this.received.guild.fetchAuditLogs({ type: "MEMBER_ROLE_UPDATE" })
+    ).entries;
+    const auditLog = auditLogs.find(
+      (x: any) => x.target.id == this.received.user.id
+    );
     if (this.before.roles.cache.size < this.received.roles.cache.size) {
       this.received.roles.cache.forEach(async (rol) => {
         if (!this.before.roles.cache.has(rol.id)) {
@@ -430,8 +450,15 @@ export class Roles {
             )
             .setColor(0x000c912d);
 
+          if (auditLog.executor.id) {
+            embed.setFooter(
+              `Agregado por ${auditLog.executor.tag}`,
+              auditLog.executor.displayAvatarURL()
+            );
+          }
+
           return this.received.guild.channels.cache
-            .find((x) => x.name.includes(`roles`))
+            .find((x) => x.name.includes(`logs-test`))
             .send({ embeds: [embed] })
             .catch(() => {});
         }
