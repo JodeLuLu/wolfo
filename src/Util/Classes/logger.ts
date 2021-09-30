@@ -492,6 +492,11 @@ export class Apodo {
    */
 
   async cambiado() {
+    const auditLogs = (
+      await this.after.guild.fetchAuditLogs({ type: "MEMBER_UPDATE" })
+    ).entries;
+    const auditLog = auditLogs.find((x: any) => x.target.id == this.after.id);
+
     if (this.before.nickname == this.after.nickname) return;
     const embed = new MessageEmbed()
       .setAuthor(
@@ -508,6 +513,13 @@ export class Apodo {
         }\`\`\``
       )
       .setColor(0x005f1d91);
+
+    if (auditLog.executor.id) {
+      embed.setFooter(
+        `Cambiado por ${auditLog.executor.tag}`,
+        auditLog.executor.displayAvatarURL()
+      );
+    }
 
     return this.before.guild.channels.cache
       .find((x) => x.name.includes(`logs-test`))
@@ -649,6 +661,15 @@ export class Bans {
       .send({ embeds: [embed] })
       .catch(() => {});
   }
+
+  /**
+   * @function Unbanned registra la persona desbaneada del servidor y lo manda a los logs.
+   * @param {GuildBan} UnbanData Los datos conjuntos del desbaneo.
+   * @returns {Promise<Message>} Envía el mensaje al canal de logs de los desbaneos.
+   * @example
+   * // Ejemplo del desbaneo del servidor.
+   * new Bans(ban).Unbanned();
+   */
 
   async unbanned() {
     const banlogs = (
