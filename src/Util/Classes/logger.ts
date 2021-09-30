@@ -167,7 +167,7 @@ export class Messages {
           );
 
         return this.message.client.channels.cache
-          .find((x) => x.name.includes(`logs-test`))
+          .find((x) => x.name.includes(`mensajes`))
           .send({ embeds: [w] });
       });
     }
@@ -410,7 +410,7 @@ export class Roles {
           }
 
           return this.received.guild.channels.cache
-            .find((x) => x.name.includes(`logs-test`))
+            .find((x) => x.name.includes(`roles`))
             .send({ embeds: [embed] })
             .catch(() => {});
         }
@@ -458,7 +458,7 @@ export class Roles {
           }
 
           return this.received.guild.channels.cache
-            .find((x) => x.name.includes(`logs-test`))
+            .find((x) => x.name.includes(`roles`))
             .send({ embeds: [embed] })
             .catch(() => {});
         }
@@ -522,7 +522,7 @@ export class Apodo {
     }
 
     return this.before.guild.channels.cache
-      .find((x) => x.name.includes(`logs-test`))
+      .find((x) => x.name.includes(`miembros`))
       .send({ embeds: [embed] })
       .catch(() => {});
   }
@@ -565,7 +565,7 @@ export class Members {
       .setColor(0x000c912d);
 
     this.member.client.channels.cache
-      .find((x) => x.name.includes(`logs-test`))
+      .find((x) => x.name.includes(`miembros`))
       .send({ embeds: [embed] })
       .catch(() => {});
   }
@@ -596,7 +596,7 @@ export class Members {
       .setColor(`DARK_RED`);
 
     this.member.client.channels.cache
-      .find((x) => x.name.includes(`logs-test`))
+      .find((x) => x.name.includes(`miembros`))
       .send({ embeds: [embed] })
       .catch(() => {});
   }
@@ -657,7 +657,7 @@ export class Bans {
     }
 
     this.ban.client.channels.cache
-      .find((x) => x.name.includes(`logs-test`))
+      .find((x) => x.name.includes(`miembros`))
       .send({ embeds: [embed] })
       .catch(() => {});
   }
@@ -703,7 +703,7 @@ export class Bans {
     }
 
     this.ban.client.channels.cache
-      .find((x) => x.name.includes(`logs-test`))
+      .find((x) => x.name.includes(`miembros`))
       .send({ embeds: [embed] })
       .catch(() => {});
   }
