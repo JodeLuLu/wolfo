@@ -1,6 +1,6 @@
 export const limitedCommand = [
   {
-    name: "role",
+    name: "roled",
     description: "Agrega/remueve roles especiales del usuario.",
     options: [
       {
@@ -34,7 +34,7 @@ export const limitedCommand = [
     ],
   },
   {
-    name: "code",
+    name: "coded",
     description: "Calcula una expresion con este comando.",
     options: [
       {
