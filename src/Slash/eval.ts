@@ -12,7 +12,7 @@ import { db } from "..";
 export default class SlashEval extends BaseSlashCommand {
   constructor(client: Client) {
     super(client, {
-      name: "coded",
+      name: "code",
       description: "Calcula una expresion con este comando.",
       category: "dev",
     });
