@@ -1,4 +1,5 @@
 import {
+  GuildBan,
   MessageActionRow,
   MessageButton,
   PartialGuildMember,
@@ -8,11 +9,8 @@ import {
   GuildMember,
   Message,
   MessageEmbed,
-  Role,
   Snowflake,
   User,
-  Util,
-  WebhookClient,
 } from "discord.js";
 import { uploadText } from "../Functions/util";
 import { TimeStamp } from "./time";
@@ -53,10 +51,6 @@ export class Messages {
   async deleted() {
     if (this.message.partial) await this.message.fetch();
 
-    if (this.message.author.bot == true) var bott = "Si";
-    if (this.message.author.bot == false) bott = "No";
-    if (this.message.author.bot == null) bott = "Sin datos";
-
     if (this.message.attachments.first()) {
       var mapita = this.message.attachments.map((mapita) => mapita);
       mapita.forEach((m) => {
@@ -83,7 +77,9 @@ export class Messages {
                   this.message.channel.id
                 })\n**Creación del mensaje:** <t:${new TimeStamp(
                   this.message.createdTimestamp
-                ).OutDecimals()}:R>\nBot: **${bott}**\n\n> **Fotografía**\n\n**Nombre de la fotografía:** ${
+                ).OutDecimals()}:R>\nBot: **${
+                  this.message.author.bot ? "Sí" : "No"
+                }**\n\n> **Fotografía**\n\n**Nombre de la fotografía:** ${
                   m.name
                 }\n**Link de la fotografía**: [Link](${
                   m.url
@@ -119,14 +115,60 @@ export class Messages {
               this.message.createdTimestamp
             ).OutDecimals()}:R>\n**ID del mensaje:** ${
               this.message.id
-            }\nBot: **${bott}**\n**Embed:**`
+            }\nBot: **${this.message.author.bot ? "Sí" : "No"}**\n**Embed:**`
           )
-          .setColor(0x005f1d91);
+          .setColor(`DARK_BLUE`)
+          .setAuthor(`${this.message.author.tag}`);
 
         return this.message.client.channels.cache
           .find((x) => x.name.includes(`mensajes`))
           .send({ embeds: [b, x] })
           .catch(() => {});
+      });
+    }
+
+    if (this.message.stickers.size > 0) {
+      this.message.stickers.forEach(async (x) => {
+        await x.fetch();
+        await x.fetchPack();
+        await x.fetchUser();
+
+        const w = new MessageEmbed()
+          .setDescription(
+            `> **Mensaje**\n\n**ID del mensaje:** ${
+              this.message.id
+            }\n**Autor del mensaje:** ${this.message.author} (${
+              this.message.author.id
+            })\n**Canal:**${this.message.channel} (${
+              this.message.channel.id
+            })\n**Creación del mensaje:** <t:${new TimeStamp(
+              this.message.createdTimestamp
+            ).OutDecimals()}:R>\nBot: **${
+              this.message.author.bot ? "Sí" : "No"
+            }**\n\n> **Sticker**\n\n**Nombre:** ${
+              x.name ?? "No encontrado."
+            }\n**Formato:** ${x.format ?? "No encontrado."}\n**Tags:** ${
+              x.tags ?? "No tiene."
+            }\n**Descripción:** ${
+              x.description ?? "No tiene."
+            }\n**Id del pack:** ${
+              x.packId ?? "No tiene."
+            }\n**Creador de la sticker:** ${x.user} (${
+              x.user.id
+            })\n**Disponible:** ${
+              x.available ? "Sí" : "No"
+            }\n**Link de la sticker:** [Link de la sticker](${x.url})`
+          )
+          .setImage(x.url)
+          .setColor(0x005f1d91)
+          .setAuthor(
+            `${this.message.author.tag} | Sticker eliminada`,
+            this.message.author.displayAvatarURL({ dynamic: true })
+          );
+
+        return this.message.client.channels.cache
+          .find((x) => x.name.includes(`logs-test`))
+          .send({ embeds: [w] });
       });
     }
 
@@ -145,11 +187,9 @@ export class Messages {
           this.message.author.id
         })\n**Creado:** <t:${new TimeStamp(
           this.message.createdTimestamp
-        ).OutDecimals()}:R>\n**ID del mensaje:** ${
-          this.message.id
-        }\nBot: **${bott}**\n\n**Contenido:**\n\`\`\`${
-          this.message.content
-        }\`\`\``
+        ).OutDecimals()}:R>\n**ID del mensaje:** ${this.message.id}\nBot: **${
+          this.message.author.bot ? "Sí" : "No"
+        }**\n\n**Contenido:**\n\`\`\`${this.message.content}\`\`\``
       )
       .setColor(0x00b30b0b);
 
@@ -175,6 +215,7 @@ export class Messages {
     if (this.message.author.bot == null) bott = "Sin datos";
 
     if (this.message.content.length == 0) return;
+    if (this.message.content == this.message2.content) return;
 
     const a = new MessageEmbed()
       .setAuthor(
@@ -338,6 +379,13 @@ export class Roles {
    */
 
   async quitado() {
+    const auditLogs = (
+      await this.received.guild.fetchAuditLogs({ type: "MEMBER_ROLE_UPDATE" })
+    ).entries;
+    const auditlog = auditLogs.find(
+      (x: any) => x.target.id == this.received.user.id
+    );
+
     if (this.before.roles.cache.size > this.received.roles.cache.size) {
       this.before.roles.cache.forEach(async (rol) => {
         if (!this.received.roles.cache.has(rol.id)) {
@@ -354,8 +402,15 @@ export class Roles {
             )
             .setColor(0x00b30b0b);
 
+          if (auditlog.executor.id) {
+            embed.setFooter(
+              `Removido por ${auditlog.executor.tag}`,
+              auditlog.executor.displayAvatarURL()
+            );
+          }
+
           return this.received.guild.channels.cache
-            .find((x) => x.name.includes(`roles`))
+            .find((x) => x.name.includes(`logs-test`))
             .send({ embeds: [embed] })
             .catch(() => {});
         }
@@ -373,6 +428,12 @@ export class Roles {
    */
 
   async puesto() {
+    const auditLogs = (
+      await this.received.guild.fetchAuditLogs({ type: "MEMBER_ROLE_UPDATE" })
+    ).entries;
+    const auditLog = auditLogs.find(
+      (x: any) => x.target.id == this.received.user.id
+    );
     if (this.before.roles.cache.size < this.received.roles.cache.size) {
       this.received.roles.cache.forEach(async (rol) => {
         if (!this.before.roles.cache.has(rol.id)) {
@@ -389,8 +450,15 @@ export class Roles {
             )
             .setColor(0x000c912d);
 
+          if (auditLog.executor.id) {
+            embed.setFooter(
+              `Agregado por ${auditLog.executor.tag}`,
+              auditLog.executor.displayAvatarURL()
+            );
+          }
+
           return this.received.guild.channels.cache
-            .find((x) => x.name.includes(`roles`))
+            .find((x) => x.name.includes(`logs-test`))
             .send({ embeds: [embed] })
             .catch(() => {});
         }
@@ -424,6 +492,11 @@ export class Apodo {
    */
 
   async cambiado() {
+    const auditLogs = (
+      await this.after.guild.fetchAuditLogs({ type: "MEMBER_UPDATE" })
+    ).entries;
+    const auditLog = auditLogs.find((x: any) => x.target.id == this.after.id);
+
     if (this.before.nickname == this.after.nickname) return;
     const embed = new MessageEmbed()
       .setAuthor(
@@ -440,6 +513,13 @@ export class Apodo {
         }\`\`\``
       )
       .setColor(0x005f1d91);
+
+    if (auditLog.executor.id) {
+      embed.setFooter(
+        `Cambiado por ${auditLog.executor.tag}`,
+        auditLog.executor.displayAvatarURL()
+      );
+    }
 
     return this.before.guild.channels.cache
       .find((x) => x.name.includes(`logs-test`))
@@ -470,23 +550,6 @@ export class Members {
    */
 
   async entrante() {
-    const a = new TimeStamp(`${this.member.user.createdTimestamp}`).variable();
-
-    if (
-      a.includes("segundo") ||
-      a.includes("segundos") ||
-      a.includes("minuto") ||
-      a.includes("minutos") ||
-      a.includes("hora") ||
-      a.includes("horas") ||
-      a.includes("día") ||
-      a.includes("días") ||
-      a.includes("semana") ||
-      a.includes("semanas")
-    )
-      var sospechosa = true;
-    else var sospechosa = false;
-
     const embed = new MessageEmbed()
       .setAuthor(`${this.member.user.tag} | Ha entrado en el servidor`)
       .setThumbnail(this.member.user.displayAvatarURL())
@@ -497,7 +560,7 @@ export class Members {
           `${this.member.user.createdTimestamp}`
         ).OutDecimals()}:R> (dinamica)\n **Creada hace:** ${new TimeStamp(
           this.member.user.createdTimestamp
-        ).variable()} (estatico)\n**Sospechosa:** ${sospechosa ? "✅" : "❌"}`
+        ).variable()} (estatico)`
       )
       .setColor(0x000c912d);
 
@@ -522,13 +585,15 @@ export class Members {
       .setDescription(
         `**Usuario:** ${this.member} (${
           this.member.id
-        })\n**Creada hace:**<t:${new TimeStamp(
-          `${this.member.user.createdTimestamp}`
-        ).OutDecimals()}:R> (dinamica)\n **Creada hace:** ${new TimeStamp(
+        })\n**Creada hace:** ${new TimeStamp(
           this.member.user.createdTimestamp
-        ).variable()} (estatico)\n**Miembro desde**`
+        ).variable()}\n**Miembro desde:** ${new TimeStamp(
+          this.member.joinedTimestamp
+        ).variable()}\n**Roles:**\n ${this.member.roles.cache
+          .map((x) => `${x}`)
+          .join(" ,")}`
       )
-      .setColor(0x000c912d);
+      .setColor(`DARK_RED`);
 
     this.member.client.channels.cache
       .find((x) => x.name.includes(`logs-test`))
@@ -537,4 +602,109 @@ export class Members {
   }
 }
 
-// Put the cooldown in the map
+/**
+ * @class Esta clase se encarga de registrar los miembros baneados y desbaneados del servidor.
+ * @argument {GuildMember} member El miembro baneado/desbenado
+ */
+
+export class Bans {
+  ban: GuildBan;
+
+  // Constructor de los baneos
+  constructor(ban: GuildBan) {
+    this.ban = ban;
+  }
+
+  /**
+   * @function Banned registra la persona baneada del servidor y lo manda a los logs.
+   * @param {GuildBan} banned Los datos conjuntos del baneo.
+   * @returns {Promise<Message>} Envía el mensaje al canal de logs de los baneos.
+   * @example
+   * // Ejemplo del baneo del servidor.
+   * new Bans(ban).Banned();
+   */
+
+  async banned() {
+    await this.ban.fetch();
+    const banlogs = (
+      await (
+        await this.ban.client.guilds.fetch(`699200033131724870`)
+      ).fetchAuditLogs({ type: "MEMBER_BAN_ADD" })
+    ).entries;
+    const log = banlogs.find((x: any) => x.target.id == this.ban.user.id);
+
+    const embed = new MessageEmbed()
+      .setAuthor(`${this.ban.user.tag} | Ha sido baneado del servidor`)
+      .setThumbnail(this.ban.user.displayAvatarURL())
+      .setDescription(
+        `**Usuario**: ${this.ban.user} (${
+          this.ban.user.id
+        })\n**Cuenta del baneado creada hace:** <t:${new TimeStamp(
+          this.ban.user.createdTimestamp
+        ).OutDecimals()}:R>\n**Baneado hace:** <t:${new TimeStamp(
+          Date.now()
+        ).OutDecimals()}:R>\n **Razón del baneo:**${
+          this.ban.reason ?? "No se ha dado razon"
+        }\n**Roles del usuario:**\n\n`
+      )
+      .setColor(`RED`);
+
+    if (log.executor.tag) {
+      embed.setFooter(
+        `Baneado por ${log.executor.tag}`,
+        log.executor.displayAvatarURL()
+      );
+    }
+
+    this.ban.client.channels.cache
+      .find((x) => x.name.includes(`logs-test`))
+      .send({ embeds: [embed] })
+      .catch(() => {});
+  }
+
+  /**
+   * @function Unbanned registra la persona desbaneada del servidor y lo manda a los logs.
+   * @param {GuildBan} UnbanData Los datos conjuntos del desbaneo.
+   * @returns {Promise<Message>} Envía el mensaje al canal de logs de los desbaneos.
+   * @example
+   * // Ejemplo del desbaneo del servidor.
+   * new Bans(ban).Unbanned();
+   */
+
+  async unbanned() {
+    const banlogs = (
+      await (
+        await this.ban.client.guilds.fetch(`699200033131724870`)
+      ).fetchAuditLogs({ type: "MEMBER_BAN_REMOVE" })
+    ).entries;
+    const log = banlogs.find((x: any) => x.target.id == this.ban.user.id);
+
+    const embed = new MessageEmbed()
+      .setAuthor(`${this.ban.user.tag} | Ha sido desbaneado del servidor`)
+      .setThumbnail(this.ban.user.displayAvatarURL())
+      .setDescription(
+        `**Usuario**: ${this.ban.user} (${
+          this.ban.user.id
+        })\n**Cuenta del desbaneado creada hace:** ${new TimeStamp(
+          this.ban.user.createdTimestamp
+        ).variable()}\n**Desbaneado hace:** <t:${new TimeStamp(
+          Date.now()
+        ).OutDecimals()}:R>\n **Razón del desbaneo:** ${
+          this.ban.reason ?? "No se ha dado razon"
+        }`
+      )
+      .setColor(`GREEN`);
+
+    if (log.executor) {
+      embed.setFooter(
+        `Desbaneado por ${log.executor.tag}`,
+        log.executor.displayAvatarURL()
+      );
+    }
+
+    this.ban.client.channels.cache
+      .find((x) => x.name.includes(`logs-test`))
+      .send({ embeds: [embed] })
+      .catch(() => {});
+  }
+}

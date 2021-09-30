@@ -7,7 +7,8 @@ import {
   Snowflake,
 } from "discord.js";
 import { Client } from "discord.js";
-import { Apodo, Members, Messages, Roles } from "../Classes/logger";
+import { consola } from "../..";
+import { Apodo, Bans, Members, Messages, Roles } from "../Classes/logger";
 import { NewMember } from "../Classes/MemberUtil";
 import { RateLimited, richPresence } from "./clientUtil";
 import { interactionUtil } from "./interactionUtil";
@@ -53,7 +54,23 @@ export function eventsCentral(client: Client) {
       new Apodo(viejo, nuevo).cambiado();
     });
     client.on("guildMemberAdd", (miembro) => {
-      const a = new NewMember(miembro);
+      new Members(miembro).entrante();
+    });
+
+    client.on("guildMemberRemove", (miembro) => {
+      new Members(miembro).saliente();
+    });
+
+    client.on("debug", (log) => {
+      consola.log(log);
+    });
+
+    client.on("guildBanAdd", (ban) => {
+      new Bans(ban).banned();
+    });
+
+    client.on("guildBanRemove", (ban) => {
+      new Bans(ban).unbanned();
     });
   } catch (e) {}
 }
