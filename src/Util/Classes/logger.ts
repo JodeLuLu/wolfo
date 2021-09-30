@@ -645,7 +645,7 @@ export class Bans {
           Date.now()
         ).OutDecimals()}:R>\n **Razón del baneo:**${
           this.ban.reason ?? "No se ha dado razon"
-        }`
+        }\n**Roles del usuario:**\n\n`
       )
       .setColor(`RED`);
 

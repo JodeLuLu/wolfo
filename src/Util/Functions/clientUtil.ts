@@ -6,14 +6,12 @@ import { TimeStamp } from "../Classes/time";
 export async function richPresence(client: Client) {
   consola.log(`Estoy listo.`);
 
-  setInterval(() => {
-    client.user.setPresence({
-      status: `idle`,
-      activities: [
-        { name: `https://github.com/Chere3/wolfo/`, type: "WATCHING" },
-      ],
-    });
-  }, 10000);
+  client.user.setPresence({
+    status: "dnd",
+    activities: [
+      { name: "https://github.com/Chere3/wolfo/tree/main", type: "LISTENING" },
+    ],
+  });
 
   // Logging
   const a = new MessageEmbed()
