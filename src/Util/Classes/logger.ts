@@ -167,7 +167,7 @@ export class Messages {
           );
 
         return this.message.client.channels.cache
-          .find((x) => x.name.includes(`logs-test`))
+          .find((x) => x.name.includes(`mensajes`))
           .send({ embeds: [w] });
       });
     }
