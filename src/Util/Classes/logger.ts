@@ -585,7 +585,7 @@ export class Members {
       );
 
     this.member.guild.channels.cache
-      .find((x) => x.name.includes(`bienvenidaz`))
+      .find((x) => x.name.includes(`bienvenidas`))
       .send({ content: `${this.member.user}`, embeds: [embed] });
 
     return this;
@@ -608,7 +608,7 @@ export class Members {
       .setColor(`DARK_RED`);
 
     this.member.guild.channels.cache
-      .find((x) => x.name.includes(`despedidaz`))
+      .find((x) => x.name.includes(`despedidas`))
       .send({ embeds: [embed] });
 
     return this;
