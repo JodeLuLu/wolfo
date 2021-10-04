@@ -48,17 +48,15 @@ export function eventsCentral(client: Client) {
     });
 
     // Member
-    client.on("guildMemberUpdate", (viejo, nuevo) => {
-      new Roles(nuevo, viejo).quitado();
-      new Roles(nuevo, viejo).puesto();
-      new Apodo(viejo, nuevo).cambiado();
+    client.on("guildMemberUpdate", async (viejo, nuevo) => {
+      await (await new Roles(nuevo, viejo).puesto()).quitado();
     });
-    client.on("guildMemberAdd", (miembro) => {
-      new Members(miembro).entrante();
+    client.on("guildMemberAdd", async (miembro) => {
+      (await new Members(miembro).entrante()).welcome();
     });
 
-    client.on("guildMemberRemove", (miembro) => {
-      new Members(miembro).saliente();
+    client.on("guildMemberRemove", async (miembro) => {
+      (await new Members(miembro).saliente()).goodbye();
     });
 
     client.on("debug", (log) => {

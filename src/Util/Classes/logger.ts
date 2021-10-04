@@ -91,10 +91,12 @@ export class Messages {
               )
               .setTimestamp();
 
-            return this.message.client.channels.cache
+            this.message.client.channels.cache
               .find((x) => x.name.includes(`mensajes`))
               .send({ embeds: [w] })
               .catch(() => {});
+
+            return this;
           });
       });
     }
@@ -120,10 +122,12 @@ export class Messages {
           .setColor(`DARK_BLUE`)
           .setAuthor(`${this.message.author.tag}`);
 
-        return this.message.client.channels.cache
+        this.message.client.channels.cache
           .find((x) => x.name.includes(`mensajes`))
           .send({ embeds: [b, x] })
           .catch(() => {});
+
+        return this;
       });
     }
 
@@ -166,9 +170,11 @@ export class Messages {
             this.message.author.displayAvatarURL({ dynamic: true })
           );
 
-        return this.message.client.channels.cache
+        this.message.client.channels.cache
           .find((x) => x.name.includes(`mensajes`))
           .send({ embeds: [w] });
+
+        return this;
       });
     }
 
@@ -193,10 +199,12 @@ export class Messages {
       )
       .setColor(0x00b30b0b);
 
-    return this.message.client.channels.cache
+    this.message.client.channels.cache
       .find((x) => x.name.includes(`mensajes`))
       .send({ embeds: [a] })
       .catch(() => {});
+
+    return this;
   }
 
   /**
@@ -248,10 +256,12 @@ export class Messages {
 
     const c = new MessageActionRow().addComponents(b);
 
-    return this.message.client.channels.cache
+    this.message.client.channels.cache
       .find((x) => x.name.includes(`mensajes`))
       .send({ embeds: [a], components: [c] })
       .catch(() => {});
+
+    return this;
   }
 
   /**
@@ -344,6 +354,8 @@ export class Messages {
           .client.channels.cache.find((x) => x.name.includes(`mensajes`))
           .send({ embeds: [a] })
           .catch(() => {});
+
+        return this;
       });
   }
 }
@@ -409,10 +421,12 @@ export class Roles {
             );
           }
 
-          return this.received.guild.channels.cache
+          this.received.guild.channels.cache
             .find((x) => x.name.includes(`roles`))
             .send({ embeds: [embed] })
             .catch(() => {});
+
+          return this;
         }
       });
     }
@@ -457,13 +471,15 @@ export class Roles {
             );
           }
 
-          return this.received.guild.channels.cache
+          this.received.guild.channels.cache
             .find((x) => x.name.includes(`roles`))
             .send({ embeds: [embed] })
             .catch(() => {});
         }
       });
     }
+
+    return this;
   }
 }
 
@@ -521,10 +537,12 @@ export class Apodo {
       );
     }
 
-    return this.before.guild.channels.cache
+    this.before.guild.channels.cache
       .find((x) => x.name.includes(`miembros`))
       .send({ embeds: [embed] })
       .catch(() => {});
+
+    return this;
   }
 }
 
@@ -542,6 +560,61 @@ export class Members {
   }
 
   /**
+   * @function welcome Da la bienvenida a un usuario nuevo al servidor.
+   * @param {GuildMember} member El usuario del evento de entrada.
+   * @returns {Promise<Message>} Envía el mensaje al canal de bievenidas.
+   * @example
+   * new Member(member).welcome();
+   */
+
+  welcome() {
+    const embed = new MessageEmbed()
+      .setAuthor(
+        `¡Bienvenido al servidor! ${this.member.user.tag}`,
+        this.member.user.displayAvatarURL()
+      )
+      .setDescription(
+        `> Pasate por <#851151999856279632> para poder personalizar tu perfil\n\n> Revisa <#820639237519048724> para no perderte de ninguna novedad.\n\n> Y revisa <#892521430707761162> para tener acceso a canales exclusivos.`
+      )
+      .setColor(0x000c912d)
+      .setImage(
+        "https://cdn.discordapp.com/banners/699200033131724870/9f23bca48f762c56b3c4c99ae8f0e9a1.png?size=2048"
+      )
+      .setFooter(
+        `Contigo somos ${this.member.guild.memberCount} miembros. ¡Gracias!`
+      );
+
+    this.member.guild.channels.cache
+      .find((x) => x.name.includes(`bienvenidaz`))
+      .send({ content: `${this.member.user}`, embeds: [embed] });
+
+    return this;
+  }
+
+  /**
+   *
+   * @function goodbye
+   * @param {GuildMember} member El usuario del evento de salida.
+   * @returns {Promise<Message>} Envía el mensaje al canal de bievenidas.
+   */
+
+  goodbye() {
+    const embed = new MessageEmbed()
+      .setAuthor(
+        `¡Adiós! ${this.member.user.tag}`,
+        this.member.user.displayAvatarURL()
+      )
+      .setDescription(`${this.member.user.tag} Ha dejado el servidor.`)
+      .setColor(`DARK_RED`);
+
+    this.member.guild.channels.cache
+      .find((x) => x.name.includes(`despedidaz`))
+      .send({ embeds: [embed] });
+
+    return this;
+  }
+
+  /**
    * @function entrante Registra la entrada de un usuario.
    * @param {GuildMember} member El usuario del evento de entrada.
    * @returns {Promise<Message>} Envía el mensaje al canal de logs de los usuarios entrantes.
@@ -549,7 +622,7 @@ export class Members {
    * new Members(member).entrante();
    */
 
-  async entrante() {
+  entrante() {
     const embed = new MessageEmbed()
       .setAuthor(`${this.member.user.tag} | Ha entrado en el servidor`)
       .setThumbnail(this.member.user.displayAvatarURL())
@@ -568,6 +641,8 @@ export class Members {
       .find((x) => x.name.includes(`miembros`))
       .send({ embeds: [embed] })
       .catch(() => {});
+
+    return this;
   }
 
   /**
@@ -599,6 +674,8 @@ export class Members {
       .find((x) => x.name.includes(`miembros`))
       .send({ embeds: [embed] })
       .catch(() => {});
+
+    return this;
   }
 }
 
@@ -660,6 +737,8 @@ export class Bans {
       .find((x) => x.name.includes(`miembros`))
       .send({ embeds: [embed] })
       .catch(() => {});
+
+    return this;
   }
 
   /**
@@ -706,5 +785,7 @@ export class Bans {
       .find((x) => x.name.includes(`miembros`))
       .send({ embeds: [embed] })
       .catch(() => {});
+
+    return this;
   }
 }
